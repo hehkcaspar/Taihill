@@ -53,9 +53,10 @@ a:hover { color:#2B88A3;}
     background-color: #4ABCDD;
 }
 
+/*
 .project-image:hover .overlay {
     background-color: rgba(245, 79, 54, 0.85);
-}
+}*/
 
 .masonry-post-more:hover,
 .btn-masonry:hover,
