@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hongkai He - Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> 
+    <style>
+        /* Color variables */
+        :root {
+            --red-pantone: #e63946ff;
+            --honeydew: #f1faeeff;
+            --non-photo-blue: #a8dadcff;
+            --cerulean: #457b9dff;
+            --berkeley-blue: #1d3557ff;
+            --eerie-black: #1b2021ff;
+        }
+
+        /* General styles */
+        body {
+            font-family: sans-serif; /* Choose a suitable font */
+            color: var(--berkeley-blue); /* Dark blue text */
+        }
+
+        /* Style for the fixed sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 250px; /* Adjust as needed */
+            padding-top: 56px; /* Adjust for header height */
+            overflow-y: auto;
+            background-color: var(--berkeley-blue); /* non-photo-blue background */
+            color: white;
+            text-align: center;
+        }
+
+        .sidebar .nav {
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+
+        .sidebar .nav-link {
+            color: white; /* Set navigation link color to white */
+        }
+
+        /* Adjust main content to accommodate sidebar */
+        .main-content {
+            margin-left: 250px; /* Match sidebar width */
+            padding: 30px;
+        }
+
+        /* Style for the circular headshot */
+        .headshot {
+            width: 150px; /* Adjust as needed */
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover; /* Maintain aspect ratio and crop if necessary */
+            margin: 20px auto; /* Center the image */
+            display: block; 
+        }
+
+        /* Style for the social media icons */
+        .social-icons {
+            text-align: center; /* Center the icons */
+            margin-top: 20px; /* Adjust as needed */
+        }
+
+        .social-icons a {
+            display:inline-block;
+            margin: 0 5px; /* Adjust spacing as needed */
+        }
+
+        .social-icons .bi {
+            font-size: 30px; /* Adjust as needed */
+            color: var(--cerulean); /* Default color, you can change this */
+        }
+
+        /* Style for the name and title section in the sidebar*/
+        .name-title-sidebar {
+            text-align: center;
+            margin-top: 20px; /* Adjust as needed */
+        }
+
+        /* Style for the name and title section in the main body*/
+        .name-title {
+            text-align: left;
+            margin-top: 20px; /* Adjust as needed */
+        }
+
+        .carousel {
+            max-width: 1024px;
+            width: 50%;
+            min-width: 512px;
+            min-height: 384px;
+        }
+
+        .carousel iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<!--
+    <header class="container-fluid p-3 bg-dark text-white">
+        <h1 class="text-center">Hongkai He</h1>
+    </header>
+-->
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 sidebar">
+                <img src="../img/team/hongkai3.jpg" alt="Hongkai He" class="headshot">
+                <div class="name-title-sidebar">
+                    <h3>Hongkai He</h3>
+                    <p>何鸿恺</p>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#intro">Intro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#work">Work</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#nonprofit">Nonprofit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#interest">Interest</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#philosophy">Philosophy</a>
+                    </li>
+                </ul>
+                <div class="social-icons">
+                    <a href="https://www.linkedin.com/in/hongkaihe/" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-linkedin"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" />
+                        </svg>
+                    </a>
+                    <a href="mailto:hongkai@taihill.vc" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+                        </svg>
+                    </a>
+                </div>
+            </nav>
+
+            <main class="col-md-9 main-content mt-4">
+                <div class="name-title">
+                    <h2>Hongkai He</h2>
+                    <p>General Partner @ Taihill Venture <br>
+                        Venture Creation Director @ Oddity Labs <br>
+                        Board of Advisors @ Boston Ballet <br>
+                    </p>
+                </div>
+
+                <section id="intro"> 
+                    <h2>About Me</h2>
+                    <p>
+                        Hongkai was born in Guangzhou (广州), China. <br>
+                        I attended Zhixin High School, where I began to build my view on the world and life. <br>
+                        I completed my undergrad and was in PhD program at Sun Yat-Sen University, majoring in computational mathematics and HPC. 
+                        However, I ended up mastering out because, at that time, China lacked sufficient applications running on HPC to fully realize its potential.
+                        <br>
+                        In 2014, I moved to the US to pursue a second master's degree in Management Science and Engineering, a joint program 
+                        offered by engineering and business schools at Columbia University. 
+                        <br>
+                        My educational background has taught me to view the world from three distinct perspectives: scientific, engineering, and business. 
+                        This multifaceted approach has given me triple the fun in exploring and understanding the world.
+                        <br>
+                        During my second year at Columbia, I co-founded TalentJungle and continued working on it until 2016. Afterward, I moved to Boston to become 
+                        an Associate and EIR at BAC Investment, where I co-founded Boston Innovation Growth. 
+                        <br>
+                        Since 2018, I've been working with my partner, Sky Yu, to build Taihill Venture.
+                    </p>
+                </section>
+
+                <section id="work" class="mt-4">
+                    <h2>Work</h2>
+                    <h4>General Partner @ Taihill Venture</h4>
+                    <p>
+                        At Taihill Venture, we're all about backing bold ideas and groundbreaking technologies that have the potential 
+                        to reshape industries. Since 2017, we've had the privilege of investing in over 130 startups, including some 
+                        truly remarkable companies like Lightelligence, KulaBio, and XtalPi. Our team is dedicated to supporting scientific founders 
+                        as they turn their visions into reality. My personal focus areas include biotech and AI - two fields that I believe hold immense promise for the future.
+                    </p> 
+                    <h4>Venture Creation Director @ ODDITY ($ODD)</h4>
+                    <p>
+                        Oddity is shaking up the beauty and wellness industry with its digital-first approach. Through our brands like IL Makiage 
+                        and SpoiledChild, we're redefining how people experience these products. At ODDITY Labs, our Boston-based R&D hub, we're 
+                        pushing the boundaries of science-backed innovation. We're using cutting-edge technologies like AI to develop new molecules 
+                        and products that truly make a difference. My role involves scouting for exciting new technologies, intellectual property, 
+                        and entrepreneurial scientists to help us create the next generation of beauty and wellness brands.
+                    </p> 
+                </section>
+
+                <section id="nonprofit" class="mt-4">
+                    <h2>Nonprofit</h2>
+                    <h4>Board of Advisors @ Boston Ballet</h4>
+                    <p>
+                        As a long-time supporter of the Boston Ballet, I'm thrilled to serve on their Board of Advisors. It's a fantastic opportunity to bridge 
+                        the worlds of technology and art, exploring how innovation can enhance the ballet's artistic expression and reach.
+                    </p> 
+                    <h4>Vice President @ U.S.-China Health Summit </h4>
+                    <p>
+                        The U.S.-China Health Summit fosters global health knowledge exchange and collaboration among healthcare leaders 
+                        from the US, China, and beyond. Established in 2011 at Harvard University, the Summit has hosted annual public health conferences and, since 2020, 
+                        online seminars and reports addressing the COVID-19 pandemic. Though currently paused due to geopolitical challenges, the Summit remains dedicated 
+                        to its mission of improving healthcare through international cooperation.
+                    </p>
+                </section>
+
+                <section id="interest" class="mt-4">
+                    <h2>Interest</h2>
+                    <h4>Motorsport</h4>
+                    <div id="car" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#car" data-bs-slide-to="0" class="active"
+                                aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#car" data-bs-slide-to="1"
+                                aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#car" data-bs-slide-to="2"
+                                aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+                                aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="./interests/motorsport/_NZ92549-Enhanced-NR.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/motorsport/DSC01941.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/motorsport/DSC02208.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/motorsport/bugeye.png" class="d-block w-100" alt="...">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#car"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#car"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <p>
+                        Track day, Auto Cross, Rally Cross. <br>
+                        You may find me in Thompson Speedway, Palmer Motorsports Park, Devens Airfield.<br>
+                        But more often, you'll find me working in the garage fixing something... 
+                    </p>
+                    <h4>Dragonboat</h4>
+                    <div class="carousel">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/OOItMXFtrsA?si=0_WU0bZWjLlnBLXm" title="YouTube video player" 
+                        frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <p>
+                        I'm also part of the Sun Yat-Sen University Alumni dragon boat team. We compete in the Boston Hong Kong Dragon Boat Festival every year, 
+                        and it's always a blast. If you're ever near the Charles River or Fort Point Channel in early summer, keep an eye out for us! <br>
+                        We're always looking for new members to join the fun, even if it's just for training.
+                    </p>
+                    <h4>Cats and Dogs</h4>
+                    <div id="pet" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="0" class="active"
+                                aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="1"
+                                aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="2"
+                                aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="3"
+                                aria-label="Slide 4"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="4"
+                                aria-label="Slide 5"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="5"
+                                aria-label="Slide 6"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="6"
+                                aria-label="Slide 7"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="7"
+                                aria-label="Slide 8"></button>
+                            <button type="button" data-bs-target="#pet" data-bs-slide-to="8"
+                                aria-label="Slide 9"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="./interests/pet/20231221_221054.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/mmexport1518388497003.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/IMG_20220617_190135.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/IMG_20200623_143649.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/20231225_103726.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/20221103_144312.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/20240210_161924.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/20220308_134222.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./interests/pet/20220506_200357.jpg" class="d-block w-100" alt="...">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#pet"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#pet"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <p>
+                        Pingping (Black Tabby Cat), Henry (Orange Tabby Cat) and <br>
+                        Anton (Mix of Tibetan Mastiff, Newfoundland, Golden Retriever, Caucasian Shepherd and Kangal Shepherd). <br>
+                        Pingping is my first pet in the US and sadly passed away in May 2024.<br>
+                        Anton and Henry are enjoying life every moment.<br>
+                        To better serve our fur babies, my wife works at Chewy :P
+                    </p>
+                </section>
+                <section id="philosophy" class="mt-4">
+                    <h2>Philosophy</h2>
+                    <h4>Śūnyatā 空性</h4>
+                    <p>
+                        Everything is interconnected and dependent on various causes and conditions, lacking a permanent, self-contained existence and identity.
+                    </p>
+                    <h4>Law of Causality 因果</h4>
+                    <p>
+                        Bodhisattvas are mindful of causes, while normal people are concerned with effects.
+                    </p>
+                    <h4>Manifestation</h4>
+                    <p>
+                        The "world" is shaped by your perception, based on the limited input from your senses. A dog perceives it differently from a bat or a fish, 
+                        and so does every individual. If one controls your input, they weave your "truth".
+                    </p>
+                    <h4>Transhumanism</h4>
+                    <p>
+                        We shall and will enhance our logevity, cognition and well-being.
+                    </p>
+                    <h4>Intelligence = (Data, Algo, Compute)</h4>
+                    <p>
+                        This applies to both humans and AI. As a human, I take every chance to access accurate raw data, refactor my cognition, and keep my brain sharp.
+                    </p>
+                    <h4>Power, Wealth and Fame are all Means</h4>
+                    <p>
+                        Stay mindful of your means and your goals; don't lose sight of what truly matters to you.
+                    </p>
+                    <h4>Interest Call >> Moral Call</h4>
+                    <p>
+                        To effectively push through an agenda on a large scale, it's essential to design a compelling economic or incentive system to motivate participants. 
+                        While moral appeals can help enhance public perception and support, they are not the primary driving force. 
+                        Consider examples like carbon credits, religions, and elections, where economic incentives often play a more significant role than moral arguments alone.
+                    </p>
+                    <h4>Simplicity and Efficiency</h4>
+                    <p>
+                        <s>Overengineering, Bureaucracy, Ambiguity, Hypocrisy, Formalism, Inconsistent Standards, Inefficient Process...</s><br>
+                        This page is designed to facilitate clear and straightforward communication.
+                        Noted, human speaking bandwidth is merely 39 bits per second.
+                    </p>
+                </section>
+            </main>
+        </div> 
+    </div>
+
+    <footer class="container-fluid p-3 mt-4 bg-light text-center">
+        <p>&copy; 2024 Hongkai He</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
