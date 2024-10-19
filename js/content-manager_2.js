@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <img src="${item.image}" alt="${item.name}" class="img-fluid">
                                 <div class="overlay">
                                     <div class="details">
-                                        <h3>${item.name}</h3>
-                                        <h2>${item.title}</h2>
+                                        <h2>${item.name}</h2>
+                                        <h3>${item.title}</h3>
                                         <p>${item.description.replace(/\n/g, '<br>')}</p>
                                     </div>
                                 </div>
@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
             container.insertAdjacentHTML('beforeend', itemHtml);
         });
     }
+
 
     // Fetch Portfolio Items from JSON File
     fetch('json/portfolio.json')
@@ -70,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error fetching team items:', error));
 
-/* local fallback test
+/*
+ //  local fallback test
     const portfolioItems = [
         {
           link: 'https://www.lightelligence.ai/',
