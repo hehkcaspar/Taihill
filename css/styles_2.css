@@ -81,6 +81,10 @@ body {
 }
 
 /* Portfolio Styles */
+#portfolio {
+  background-color: #ffffff;
+}
+
 .project-item {
   position: relative;
   overflow: hidden;
