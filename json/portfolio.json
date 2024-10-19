@@ -1,0 +1,296 @@
+[
+  {
+    "link": "https://www.lightelligence.ai/",
+    "image": "img/portfolio/lightelligence.png",
+    "title": "Lightelligence",
+    "description": "Lightelligence builds optical chips that offer orders of magnitude improvement in terms of high speed, low latency, and low power consumption compared to traditional electronic architectures."
+  },
+  {
+    "link": "https://www.kulabio.com/",
+    "image": "img/portfolio/kula.png",
+    "title": "Kula Bio",
+    "description": "Kula Bio super-charges natural nitrogen-fixing microbes with renewable energy in order to deliver reliable, low-cost organic biofertilizers."
+  },
+  {
+    "link": "https://www.xtalpi.com/en/",
+    "image": "img/portfolio/xtalpi.png",
+    "title": "XtalPi",
+    "description": "XtalPi is a quantum physics-based, AI-powered drug R&D company with the mission to revolutionize drug discovery and development by improving the speed, scale, novelty and success rate."
+  },
+  {
+    "link": "https://www.livebutlr.com/",
+    "image": "img/portfolio/butlr.png",
+    "title": "Butlr",
+    "description": "Butlr uses a mix of wireless, energy-and-power-effective infrared sensors and AI to detect peoples' indoor location, posture, and body temperature with easy setup, safeguarding privacy."
+  },
+  {
+    "link": "https://getrevela.com/",
+    "image": "img/portfolio/revela-acq.PNG",
+    "title": "Revela",
+    "description": "Revela uses nature as a launchpad and applies artificial intelligence (AI) and cutting-edge biotechnology to unlock access to millions of new ingredients."
+  },
+  {
+    "link": "http://www.manusbio.com/",
+    "image": "img/portfolio/manus_bio.png",
+    "title": "Manus Bio",
+    "description": "Natural ingredients for a sustainable future."
+  },
+  {
+    "link": "https://axoft.us/",
+    "image": "img/portfolio/Axoft.png",
+    "title": "Axoft",
+    "description": "Axoft develops ultra soft and scalable materials for brain implants to promote long-term communication with the nervous system."
+  },
+  {
+    "link": "https://www.concertobio.com/",
+    "image": "img/portfolio/concertobio.png",
+    "title": "Concerto Bio",
+    "description": "Concerto Bio invents high throughput microbial interaction screening technology to discover microbial ensembles for new therapeutics."
+  },
+  {
+    "link": "https://www.cache-dna.com/",
+    "image": "img/portfolio/cacheDNA.png",
+    "title": "CacheDNA",
+    "description": "CacheDNA develops a storage system that maintains the quality and integrity of nucleic acids forever without requiring energy and enables targeted retrieval of any sample subsets. It will revolutionize the biobank in near-term and become the backbone of DNA data storage in long-term."
+  },
+  {
+    "link": "https://www.sanaheal.com/",
+    "image": "img/portfolio/sanaheal.png",
+    "title": "SanaHeal",
+    "description": "SanaHeal is a material startup developing bioadhesives with superior adhesion performance, biosafety, and tunable biodegradability."
+  },
+  {
+    "link": "https://laseinnovation.com/",
+    "image": "img/portfolio/LASE.png",
+    "title": "LASE Innovation",
+    "description": "LASE Innovation is developing light-emitting particles with nano-to-micron sizes that can provide unique IDs for up to a billion-level live cells."
+  },
+  {
+    "link": "https://www.chempower-corp.com/",
+    "image": "img/portfolio/ChEmpower.png",
+    "title": "ChEmpower",
+    "description": "ChEmpower Corporation is an advanced materials and specialized chemistry start-up that develops and supplies chemically reactive pads for use in planarization of semiconductor chip devices."
+  },
+  {
+    "link": "https://www.cyberdontics.co/",
+    "image": "img/portfolio/Cyberdontics.png",
+    "title": "Cyberdontics",
+    "description": "Cyberdontics develops a dental robotic surgery system that is capable of extremely accurate tooth cutting, down to around 30 microns for dental crowns, in 15 minutes."
+  },
+  {
+    "link": "https://www.pantheondesign.com/",
+    "image": "img/portfolio/Pantheon.png",
+    "title": "Pantheon",
+    "description": "10X faster industrial 3D printing solution."
+  },
+  {
+    "link": "https://3eohealth.com/",
+    "image": "img/portfolio/3EO.png",
+    "title": "3EO Health",
+    "description": "3EO is the first option for physicians and consumers to deliver the real-time, PCR-level performance of molecular diagnostics at the cost of antigen tests."
+  },
+  {
+    "link": "https://anthology.bio/",
+    "image": "img/portfolio/anthology.png",
+    "title": "Anthology",
+    "description": "Anthology is an evolution company generating diverse genomes to scale and digitalize biomanufacturing. It unlocks new possibilities for biomanufacturing by accelerating the speed of genetic mutations and selection in fungi, autotrophic bacteria, and plants."
+  },
+  {
+    "link": "https://www.sylvaticabio.com/",
+    "image": "img/portfolio/sylvatica.png",
+    "title": "Sylvatica Biotech",
+    "description": "Sylvatica is commercializing the supercooled ice-free organ storage system, which can significantly extend the ex-vivo life of transplanting organs."
+  },
+  {
+    "link": "https://www.bioz.com/",
+    "image": "img/portfolio/bioz.png",
+    "title": "Bioz",
+    "description": "Bioz uses NLP to read over 30 million biochemical articles and develops a search engine for scientific experimentation and product procurement."
+  },
+  {
+    "link": "https://www.acrobatgenomics.com/",
+    "image": "img/portfolio/AcrobatGx.png",
+    "title": "Acrobat Genomics",
+    "description": "Acrobat develops high-throughput approaches to discover anti-CRISPR proteins to solve off-target effects in gene editing therapeutics."
+  },
+  {
+    "link": "https://www.enrichtx.com/",
+    "image": "img/portfolio/enrich.png",
+    "title": "Enrich Biosystems",
+    "description": "Enrich develops a groundbreaking microfluidics-free cell discovery platform to enable a streamlined workflow of cell co-culturing, kinetics profiling, and guided capturing based on cell functions."
+  },
+  {
+    "link": "https://www.relativityspace.com/",
+    "image": "img/portfolio/relativity.jpg",
+    "title": "Relativity Space",
+    "description": "Relativity is the first and only company to automate aerospace manufacturing by integrating intelligent robotics, software, and proprietary metal 3D printing technology."
+  },
+  {
+    "link": "https://cardeabio.com/",
+    "image": "img/portfolio/Cardea.png",
+    "title": "Cardea Bio",
+    "description": "Cardea’s Tech+Bio Infrastructure, the Biology-gated Transistors, has created a paradigm shift in Life Science and technology with the development and introduction of biology being directly integrated into modern electronics."
+  },
+  {
+    "link": "https://www.kebotix.com/",
+    "image": "img/portfolio/kebotix.png",
+    "title": "Kebotix",
+    "description": "Kebotix is an algorithm-driven materials discovery and production company. Its self-driving lab combines data and AI with robotics to discover and create advanced chemicals and materials at a faster rate and lower costs."
+  },
+  {
+    "link": "https://www.immusoft.com/",
+    "image": "img/portfolio/immusoft.PNG",
+    "title": "Immusoft",
+    "description": "Immusoft is developing novel cell therapies by programming B cells to produce therapeutic proteins that improve the lives of patients with rare diseases."
+  },
+  {
+    "link": "https://modern-synthesis.com/",
+    "image": "img/portfolio/modsyn.PNG",
+    "title": "Modern Synthesis",
+    "description": "Modern Synthesis uses synthetic biology to develop regenerative materials for the fashion industry."
+  },
+  {
+    "link": "https://databento.com/",
+    "image": "img/portfolio/databento_new.png",
+    "title": "Databento",
+    "description": "Databento is an à la carte data marketplace for the financial industry. Customize your financial data set, get pricing in real-time, and pay for only what you need with Databento's Datapack."
+  },
+  {
+    "link": "https://www.galixir.com/en",
+    "image": "img/portfolio/Galixir.png",
+    "title": "Galixir",
+    "description": "Galixir is a company dedicated to applying cutting-edge artificial intelligence technologies to empower drug discovery."
+  },
+  {
+    "link": "https://www.signetbio.com/",
+    "image": "img/portfolio/Signet.jpg",
+    "title": "Signet Therapeutics",
+    "description": "Signet Therapeutics is developing two classes of cancer therapies that are focused on the molecularly related cancers of diffuse stomach cancer and lobular breast cancer."
+  },
+  {
+    "link": "https://www.proteowise.com/",
+    "image": "img/portfolio/proteowise.png",
+    "title": "Proteowise",
+    "description": "Proteowise invented a proteomic technology that’s 50x faster, 50x smaller, 10x cheaper and gives 100x more data per sample. It will enable researchers to finally move beyond western blot and into easy, high-throughput bench-top proteomics."
+  },
+  {
+    "link": "https://altrixbio.com/",
+    "image": "img/portfolio/AltrixBio.png",
+    "title": "AltrixBio",
+    "description": "LuCI™ is a repurposed pill that adheres to the gastrointestinal (GI) tract for controlled GI targeting, especially for treating Type 2 Diabetes (T2D)."
+  },
+  {
+    "link": "https://www.finwavesemi.com/",
+    "image": "img/portfolio/cambridge-electronics-finwave.png",
+    "title": "Finwave Semiconductor",
+    "description": "Finwave is developing the most advanced and high-performance GaN power electronic chips in the market. With them, we have been able to reduce the volume of many power electronic systems by 10x, while cutting the power losses by at least 50%."
+  },
+  {
+    "link": "https://www.newfrontierbio.com/",
+    "image": "img/portfolio/NFB.png",
+    "title": "New Frontier Bio",
+    "description": "New Frontier Bio is a consumer health company identifying, optimizing, and commercializing natural compounds for human health and longevity by utilizing biopharma and biotech principles."
+  },
+  {
+    "link": "http://regen-bio.com/",
+    "image": "img/portfolio/regenbio.png",
+    "title": "Regenerative Bio",
+    "description": "RegenBio applies AI to explore anti-aging related ingredients, formulas, measurements, and treatments."
+  },
+  {
+    "link": "http://hyperlooptech.com/",
+    "image": "img/portfolio/hyperloop.png",
+    "title": "Hyperloop One",
+    "description": "Hyperloop One (previously known as Hyperloop Technologies) starts to research and building the hyperloop into reality."
+  },
+  {
+    "link": "https://point.cloud/",
+    "image": "img/portfolio/pointcloud.PNG",
+    "title": "Pointcloud",
+    "description": "Pointcloud develops next-gen solid-state Lidar on silicon photonics chips."
+  },
+  {
+    "link": "https://www.valitorbio.com/",
+    "image": "img/portfolio/valitor.PNG",
+    "title": "Valitor",
+    "description": "Valitor, Inc. has developed novel methods of modifying therapeutic proteins to achieve substantial control over their pharmacokinetics, target specificity, and bioactivity."
+  },
+  {
+    "link": "http://www.zsfab.com/",
+    "image": "img/portfolio/zs_fab.png",
+    "title": "ZSFab",
+    "description": "ZSFab is a Medical 3D printing company that provides modeling optimization and 3D printing of patient-specific surgical guides and biocompatible, biomechanical fit implants, surgical guides, and anatomical models."
+  },
+  {
+    "link": "https://landsdownelabs.com/",
+    "image": "img/portfolio/landsdowneLabs.png",
+    "title": "Landsdowne Labs",
+    "description": "We are focused on developing advanced materials for injury prevention, to bring solutions to a set of patients that are often overlooked: children."
+  },
+  {
+    "link": "https://theradep.com/",
+    "image": "img/portfolio/theradep.png",
+    "title": "TheraDep Technologies",
+    "description": "TheraDep™ Technologies addresses the profound medical need for an entirely new method of local, targeted, non-systemic delivery of a broad range of pure, active biologic materials or drugs."
+  },
+  {
+    "link": "http://www.mumec.com/",
+    "image": "img/portfolio/mumec.png",
+    "title": "MuMec",
+    "description": "MuMec is building new wireless transceiver technologies that enable drastically lower operating power for use with Bluetooth LE (BLE) and LoRa/Sigfox protocols. MuMec integrates Radio Frequency MEMS technology with CMOS design, offering a 10-100x reduction in power consumption."
+  },
+  {
+    "link": "http://www.easytransfer.cn/",
+    "image": "img/portfolio/easytransfer.png",
+    "title": "EasyTransfer",
+    "description": "EasyTransfer helps China's outbound students pay their tuition fees more quickly and at cheaper foreign exchange rates. EasyTransfer processed $140M tuition in 2016."
+  },
+  {
+    "link": "https://parallel.fi/",
+    "image": "img/portfolio/Parallel.PNG",
+    "title": "Parallel Finance",
+    "description": "Parallel Finance is a decentralized lending and staking protocol on Polkadot and Ethereum."
+  },
+  {
+    "link": "https://www.citcon.com",
+    "image": "img/portfolio/Citcon.png",
+    "title": "Citcon",
+    "description": "Citcon makes integrating Alipay and WeChat Pay for U.S. merchants easy. It helps brands tap into the rapidly growing Chinese market, without the costs and hassles of establishing a business in China."
+  },
+  {
+    "link": "https://www.snappay.ca/",
+    "image": "img/portfolio/snappay.png",
+    "title": "SnapPay",
+    "description": "SnapPay is the leading North American payment gateway. Not only enable traditional payment solutions like Visa, Mastercard, also have the Chinese payment instruments Alipay, WeChat Pay, and China UnionPay acceptance for North American merchants, permitting safe and secure online, in-store , in-app and mobile transactions."
+  },
+  {
+    "link": "https://snaplii.com/home-en/",
+    "image": "img/portfolio/snaplii.png",
+    "title": "Snaplii",
+    "description": "Snaplii is a North American e-wallet application that connects merchants and consumers. In addition to providing payment services, Snaplii also provides an innovative digital membership management service for local merchants."
+  },
+  {
+    "link": "https://www.wetravel.com/",
+    "image": "img/portfolio/wetravel.png",
+    "title": "WeTravel",
+    "description": "Wetravel is the online platform for anyone organizing a group trip. Built to simplify large group trips, their platform provides organizers with pre-departure tools to collect funds and organize logistics."
+  },
+  {
+    "link": "https://www.velotricbike.com/",
+    "image": "img/portfolio/velotric.png",
+    "title": "Velotric",
+    "description": "Premium electronic bike at affordable price."
+  },
+  {
+    "link": "https://www.saltalk.com/",
+    "image": "img/portfolio/saltalk.png",
+    "title": "Saltalk",
+    "description": "Saltalk operates highly automated ghost kitchens to enable virtual restaurant to deliver premium food and happiness in an affordable way."
+  },
+  {
+    "link": "https://www.onepiecework.com/",
+    "image": "img/portfolio/onepiece.png",
+    "title": "OnePiece Work",
+    "description": "OnePiece Work offers serviced space, private phone booths, conference and meeting rooms, and cross-border co-working office spaces."
+  }
+]
