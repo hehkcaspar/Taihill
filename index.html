@@ -1,11 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html class="not-ie" lang="en">
-<!--<![endif]-->
-
+<html lang="en">
 <head>
   <meta name="google-site-verification" content="u4VSLASdpRFcws_4RrbCAV4J2SSOtYEFinaZK4wHil8" />
   <meta charset="utf-8">
@@ -16,89 +10,70 @@
 
   <title>Taihill Venture</title>
   <!--Fav and touch icons-->
-  <link rel="apple-touch-icon" href="img/icons/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="img/icons/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="img/icons/apple-touch-icon-114x114.png">
   <link rel="icon" type="image/png" href="img/logo/logo-2.png">
 
-  <link rel="stylesheet" media="screen" href="css/bootstrap-3.4.1-dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/font-awesome-4.5.0/css/font-awesome.min.css" />
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="css/bootstrap-5.3.0.min.css">
   <link rel="stylesheet" type="text/css" href="css/fontello/css/fontello.css" />
-  <link rel="stylesheet" media="screen" href="css/styles.css" />
+  <link rel="stylesheet" media="screen" href="css/styles_v2.css" />
   <link rel="stylesheet" type="text/css" href="css/fonts/Raleway/raleway.css" />
-
-  <!--color stylesheet -->
-  <link rel="stylesheet" href="css/colors/color-blue.css" title="blue">
 
 </head>
 
 <body>
-
   <!-- Section : Home -->
-  <section id="home" class="home-parallax" data-stellar-background-ratio="0.3" data-stellar-vertical-offset="20">
+  <section id="home" class="home-parallax" data-bs-ride="carousel">
     <div class="home-overlay-v2">
       <div class="container">
-        <div class="col-md-12">
-
-          <div class="info">
+        <div class="col-12">
+          <div class="info text-center">
             <h2>Taihill Venture</h2>
-            <h4><br>Shaping Our Future Today</h4>
+            <h4>Shaping Our Future Today</h4>
           </div>
-          <!-- end .info -->
-
         </div>
-        <!-- end .col-md-12 -->
       </div>
-      <!-- end .cotainer -->
     </div>
-    <!-- end .home-overlay -->
   </section>
   <!-- Section : Home end -->
 
   <!-- Header -->
-  <div class="main-menu-continer">
-    <nav id="main-menu" class="navbar navbar-default">
+  <div class="main-menu-container">
+    <nav id="main-menu" class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse"
-            data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <i class="fa fa-navicon"></i>
-          </button>
-          <!-- Logo -->
-          <a href="#home" class="header-logo">
-            <img src="img/logo/taihill-logo-2.png" alt="Logo">
-          </a>
-          <!-- Logo -->
-        </div>
-        <!-- End .navbar-header -->
-
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <a class="navbar-brand" href="#home">
+          <img src="img/logo/taihill-logo.png" alt="Logo" class="img-fluid" style="height: 50px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Navigation -->
-          <ul class="nav navbar-nav" id="navs">
-            <li class="active"><a href="#home" class="colapse-menu1">Home</a></li>
-            <li><a href="#about" class="colapse-menu1">About</a></li>
-            <!--<li><a href="#exit" class="colapse-menu1">Exit</a></li> -->
-            <li><a href="#portfolio" class="colapse-menu1">Portfolio</a></li>
-            <li><a href="#team" class="colapse-menu1">Our Team</a></li>
-            <!-- <li><a href="#update" class="colapse-menu1">Portfolio Update</a></li> -->
-            <!-- <li><a href="#contact" class="colapse-menu1">Contact</a></li> -->
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#portfolio">Portfolio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#team">Our Team</a>
+            </li>
           </ul>
-          <!-- Navigation End -->
         </div>
-        <!-- End .collapse -->
       </div>
-      <!-- End .container -->
     </nav>
-    <!-- End #main-menu -->
   </div>
   <!-- Header End -->
-  <!-- Section : About -->
-  <section id="about" class="section about-style2">
-    <div class="container">
 
-      <div class="section-title">
+
+  <!-- Section : About -->
+  <section id="about" class="section about-style2 py-5" style="margin-top: 80px;">
+    <div class="container">
+      <div class="section-title text-center">
         <h2>About Us</h2>
         <span class="border"></span>
         <p>
@@ -107,1338 +82,92 @@
           With a diverse and resourceful team, we are committed to empowering scientific founders to transform their innovations into tangible, real-world solutions.
         </p>
       </div>
-      <!-- end .container -->
+    </div>
   </section>
   <!-- Section : About end -->
 
-  <!-- Section : Portfolio -->
-  <section id="portfolio" class="section">
+  <!-- Section: Portfolio (maintaining layout) -->
+  <section id="portfolio" class="section py-5">
     <div class="container">
-
-      <div class="section-title">
+      <div class="section-title text-center">
         <h2>Portfolio</h2>
         <span class="border"></span>
       </div>
-      <!-- end .section-title -->
+      <div class="row g-4" id="portfolio-items">
+        <!-- Portfolio items will be generated dynamically -->
 
-      <div class="row">
-        <!-- Portfolio container -->
-        <div class="portfolio-container">
-
-          <!-- Lightelligence-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt ai">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.lightelligence.ai/">
-                  <img src="img/portfolio/lightelligence.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Lightelligence</h2>
-                      <p><span>Lightelligence builds optical chips that offer orders of magnitude improvement in terms
-                          of high speed, low latency, and low power consumption compared to traditional electronic
-                          architectures.</span></p>
-                    </div>
+        <!-- 
+        <div class="col-sm-6 col-md-4">
+          <div class="project-item">
+            <div class="project-image">
+              <a href="https://www.lightelligence.ai/" target="_blank">
+                <img src="img/portfolio/lightelligence.png" alt="Lightelligence" class="img-fluid">
+                <div class="overlay">
+                  <div class="details">
+                    <h2>Lightelligence</h2>
+                    <p>Lightelligence builds optical chips that offer orders of magnitude improvement in terms
+                        of high speed, low latency, and low power consumption compared to traditional electronic
+                        architectures.</p>
                   </div>
-                </a>
-              </div>
+                </div>
+              </a>
             </div>
           </div>
-
-          <!-- Kula-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.kulabio.com/">
-                  <img src="img/portfolio/kula.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Kula Bio</h2>
-                      <p><span>Kula Bio super-charges natural nitrogen-fixing microbes with renewable energy in order to
-                          deliver reliable, low-cost organic biofertilizers.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- XtalPi-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.xtalpi.com/en/">
-                  <img src="img/portfolio/xtalpi.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>XtalPi</h2>
-                      <p><span>Xtapli is a quantum physics-based, AI-powered drug R&D company with the mission to
-                          revolutionize
-                          drug discovery and development by improving the speed, scale, novelty and success rate.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Butlr-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt ai">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.livebutlr.com/">
-                  <img src="img/portfolio/butlr.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Butlr</h2>
-                      <p><span>Butlr uses a mix of wireless, energy-and-power-effective infrared sensors and AI to
-                          detects peoples' indoor location, posture, and body temperature with easy setup, safeguarding
-                          privacy.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Revela-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://getrevela.com/">
-                  <img src="img/portfolio/revela-acq.PNG" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Revela</h2>
-                      <p><span>Revela uses nature as a launchpad and apply artificial intelligence (AI) and cutting-edge
-                          biotechnology to unlock access to millions of new ingredients. </span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Manus Bio-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="http://www.manusbio.com/">
-                  <img src="img/portfolio/manus_bio.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Manus Bio</h2>
-                      <p><span>Natural ingredients for a sustainable future.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Axoft-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://axoft.us/">
-                  <img src="img/portfolio/Axoft.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Axoft</h2>
-                      <p><span>Axoft develops ultra soft and scalable materials for brain implant to promote long-term communication with the nervous system.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Concerto-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.concertobio.com/">
-                  <img src="img/portfolio/concertobio.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Concerto Bio</h2>
-                      <p><span>Concerto Bio invents high throughput microbioal interaction screening technology to discover microbioal ensembles for new therapeutic.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          <!-- CacheDNA-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.cache-dna.com/">
-                  <img src="img/portfolio/cacheDNA.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>CacheDNA</h2>
-                      <p><span>CacheDNA develops storage system that maintains the quality and integrity of nucleic acids forever without requiring 
-                        energy and enables targeted retrieval of any sample subsets. It will revolutionize the biobank in near-term and become the backbone of DNA data storage in long-term.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- SanaHeal -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.sanaheal.com/">
-                  <img src="img/portfolio/sanaheal.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>SanaHeal</h2>
-                      <p><span>SanaHeal is a material startup developing bioadhesives with superior adhesion performance, biosafety & tunable biodegradability.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- LASE -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://laseinnovation.com/">
-                  <img src="img/portfolio/LASE.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>LASE Innovation</h2>
-                      <p><span>LASE Innovation is developing light-emitting particles with nano-to-micron sizes, that can provide unique IDs for up billion-level live cells.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- ChEmpower -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.chempower-corp.com/">
-                  <img src="img/portfolio/ChEmpower.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>ChEmpower</h2>
-                      <p><span>ChEmpower Corporation is an advanced materials and specialized chemistry start-up that develops and supplies chemically reactive pads for use in planarization of semiconductor chip devices.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Cyberdontics-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.cyberdontics.co/">
-                  <img src="img/portfolio/Cyberdontics.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Cyberdontics</h2>
-                      <p><span>Cyberdontics develops dental robotic surgery system that is capable of extremely accurate tooth cutting, down to around 30 microns for dental crowns, in 15 mintues.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pantheon -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.pantheondesign.com/">
-                  <img src="img/portfolio/Pantheon.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Pantheon</h2>
-                      <p><span>10X faster industrial 3D printing solution.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- 3EO Bio -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://3eohealth.com/">
-                  <img src="img/portfolio/3EO.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>3EO Health</h2>
-                      <p><span>3EO is the first option for physicians and consumers to deliver the realtime, PCR-level performance of molecular at the cost of antigen.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Anthology -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://anthology.bio/">
-                  <img src="img/portfolio/anthology.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Anthology</h2>
-                      <p><span>Anthology is an evolution company generating diverse genomes to scale and digitalize biomanufacturing. It unlocks new possibilities for biomanufacturing by accelerating the speed of genetic mutations and selection in fungi, autotrophic bacteria and plants.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sylvatica Bio -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.sylvaticabio.com/">
-                  <img src="img/portfolio/sylvatica.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Sylvatica Biotech</h2>
-                      <p><span>Sylvatica is commercializing the supercooled ice-free organ storage system, which can significantly extend the ex-vivo life of transplanting organs.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bioz -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.bioz.com/">
-                  <img src="img/portfolio/bioz.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Bioz</h2>
-                      <p><span>Bioz uses NLP to read >30M biochemical articles and develops search engine for scientific experimentation and product procurement.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Acrobat -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.acrobatgenomics.com/">
-                  <img src="img/portfolio/AcrobatGx.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Acrobat Genomics</h2>
-                      <p><span>Acrobat developes high-throughput approaches to discover anti-CRISPR proteins to solve off-target effect in gene editing therapeutics.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Enrich -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.enrichtx.com/">
-                  <img src="img/portfolio/enrich.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Enrich Biosystems</h2>
-                      <p><span>Enrich develops a groundbreaking microfluidics-free cell discovery platform to enable a streamlined workflow of cell co-culturing, kinetics profiling, and guided capturing based on cell functions. </span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Relativity-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.relativityspace.com/">
-                  <img src="img/portfolio/relativity.jpg" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Relativity Space</h2>
-                      <p><span>Relativity is the first and only company to automate aerospace manufacturing by
-                          integrating intelligent robotics, software, and proprietary metal 3D printing
-                          technology.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- CardeaBio-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt ai">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://cardeabio.com/">
-                  <img src="img/portfolio/Cardea.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Cardea Bio</h2>
-                      <p><span>Cardea’s Tech+Bio Infrastructure, the Biology-gated Transistors, has created a paradigm
-                          shift in Life Science and
-                          technology with the development and introduction of biology being directly integrated into
-                          modern electronics.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kebotix-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.kebotix.com/">
-                  <img src="img/portfolio/kebotix.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Kebotix</h2>
-                      <p><span>Kebotix is an algorithm-driven materials discovery and production company. Its
-                          self-driving
-                          lab combines data and AI with robotics to discover and create advanced chemicals and materials
-                          at a
-                          faster rate and lower costs.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Immusoft-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.immusoft.com/">
-                  <img src="img/portfolio/immusoft.PNG" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Immusoft</h2>
-                      <p><span>Immusoft is developing novel cell therapies by programming B cells to produce therapeutic
-                          proteins that improve the lives of patients with rare diseases.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Modern Synthesis -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://modern-synthesis.com/">
-                  <img src="img/portfolio/modsyn.PNG" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Modern Synthesis</h2>
-                      <p><span>Modern Synthesis uses synthetic biology to develop regenerative materials for fashion
-                          industry.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Databento / Elisify-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://databento.com/">
-                  <img src="img/portfolio/databento_new.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Databento</h2>
-                      <p><span>Databento is an à la carte data marketplace for financial industry. Customize your
-                          financial data set, get pricing in real-time, and pay for only what you need with Databento's
-                          Datapack.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Galixir-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.galixir.com/en">
-                  <img src="img/portfolio/Galixir.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Galixir</h2>
-                      <p><span>Galixir is a company dedicated to applying cutting-edge artificial intelligence
-                          technologies to empower drug discovery</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Signet-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.signetbio.com/">
-                  <img src="img/portfolio/Signet.jpg" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Signet Therapeutics</h2>
-                      <p><span>Signet Therapeutics is developing two classes of cancer therapies that are focused on the
-                          molecularly related cancers of diffuse stomach cancer and lobular breast cancer.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Proteowise-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.proteowise.com/">
-                  <img src="img/portfolio/proteowise.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Proteowise</h2>
-                      <p><span>Proteowise invented a proteomic technology that’s 50x faster, 50x smaller,
-                          10x cheaper and gives 100x more data per sample. It will enable researchers to finally
-                          move beyond western blot and into easy, high-throughput bench-top proteomics.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--AltrixBio-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://altrixbio.com/">
-                  <img src="img/portfolio/AltrixBio.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>AltrixBio</h2>
-                      <p><span>LuCI™ is a repurposed pill that adheres to the gastrointestinal (GI) track for controlled
-                          GI targeting, especially for treating Type 2 Diabetes (T2D).</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Cambridge Elect -> Finwave-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.finwavesemi.com/">
-                  <img src="img/portfolio/cambridge-electronics-finwave.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Finwave Semiconductor</h2>
-                      <p><span>Finwave is developing the most advanced and high-performance GaN
-                          power electronic chips in the market. With them, we have been able to reduce the the volume of
-                          many power electronic systems by x10, while cutting the power losses by at least 50%.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--NFB-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.newfrontierbio.com/">
-                  <img src="img/portfolio/NFB.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>New Frontier Bio</h2>
-                      <p><span>New Frontier Bio is a consumer health company identifying, optimizing, and commercializing natural compounds for human health and longevity by utilizing biopharma and biotech principles.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--RegenBio-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="http://regen-bio.com/">
-                  <img src="img/portfolio/regenbio.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Regenerative Bio</h2>
-                      <p><span>RegenBio applies AI to explore anti-aging related ingredients, formulas, measurements and treatment.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hyperloop One-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt transportation">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="http://hyperlooptech.com/">
-                  <img src="img/portfolio/hyperloop.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Hyperloop One</h2>
-                      <p><span>Hyperloop One (previously known as Hyperloop Technologies) starts to research and
-                          building the hyperloop into real.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pointcloud-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt ai">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://point.cloud/">
-                  <img src="img/portfolio/pointcloud.PNG" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Pointcloud</h2>
-                      <p><span>Pointcloud develops next-gen solid-state Lidar on silicon photonics chips.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Valitor-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.valitorbio.com/">
-                  <img src="img/portfolio/valitor.PNG" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Valitor</h2>
-                      <p><span>Valitor, Inc. has developed novel methods of modifying therapeutic proteins to achieve
-                          substantial control over their pharmacokinetics, target specificity and bioactivity.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--ZS Fab-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt health">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="http://www.zsfab.com/">
-                  <img src="img/portfolio/zs_fab.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>ZSFab</h2>
-                      <p><span>ZSFab is a Medical 3D printing company that provides modeling optimization and 3D
-                          printing of patient specific surgical guide & biocompatible, biomechanical fit implants,
-                          surgical guides and anatomical models.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Landsdowne-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://landsdownelabs.com/">
-                  <img src="img/portfolio/landsdowneLabs.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Landsdowne Labs</h2>
-                      <p><span>We are focused on developing advanced materials for injury prevention, to bring solutions
-                          to a set of patients that are often overlooked: children.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--TheraDep-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://theradep.com/">
-                  <img src="img/portfolio/theradep.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>TheraDep Technologies</h2>
-                      <p><span>TheraDep™ Technologies addresses the profound medical need for an entirely new method of
-                          local, targeted, non-systemic delivery of a broad range of pure, active biologic materials or
-                          drugs.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Mumec-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="http://www.mumec.com/">
-                  <img src="img/portfolio/mumec.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>MuMec</h2>
-                      <p><span>MuMec is building new wireless transceiver technologies that enable drastically lower
-                          operating power for use with Bluetooth LE (BLE) and LoRa/Sigfox protocols. MuMec integrates
-                          Radio Frequency MEMS technology with CMOS design, offering a 10-100x reduction in power
-                          consumption.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- EasyTransfer-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="http://www.easytransfer.cn/">
-                  <img src="img/portfolio/easytransfer.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>EasyTransfer</h2>
-                      <p><span>EasyTransfer helps China's outbound students pay their tuition fees more quickly and at
-                          cheaper foreign exchange rates. EasyTransfer processed $140M tuition in 2016.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          <!--Parallel Finance-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt tourism fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://parallel.fi/">
-                  <img src="img/portfolio/Parallel.PNG" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Parallel Finance</h2>
-                      <p><span>Parallel finance is a decentralized lending and staking protocol on Polkadot and
-                          Ethereu</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Citcon-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.citcon.com">
-                  <img src="img/portfolio/Citcon.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Citcon</h2>
-                      <p><span>Citcon makes integrating Alipay and WeChat Pay for U.S. merchants easy. It helps brands
-                          tap into the rapidly growing Chinese market, without the costs and hassles of establishing a
-                          business in China.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Snappay-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.snappay.ca/">
-                  <img src="img/portfolio/snappay.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>SnapPay</h2>
-                      <p><span>SnapPay is the leading North American payment gateway. Not only enable traditional
-                          payment solutions
-                          like Visa, Mastercard, also have the Chinese payment instruments Alipay, WeChat Pay, and China
-                          UnionPay
-                          acceptance for North American merchants, permitting safe and secure online, in-store, in-app
-                          and mobile
-                          transactions. </span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Snaplii-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://snaplii.com/home-en/">
-                  <img src="img/portfolio/snaplii.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Snaplii</h2>
-                      <p><span>Snaplii is a North American e-wallet application that connects merchants and
-                          consumers.<br>
-                          In addition to providing payment services, Snaplii also provides an innovative digital
-                          membership management service for local merchants.
-                        </span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--WeTravel-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt tourism fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.wetravel.com/">
-                  <img src="img/portfolio/wetravel.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>WeTravel</h2>
-                      <p><span>Wetravel is the online platform for anyone organizing a group trip. Built to simplify
-                          large group trips, their platform provides organizers with pre-departure tools to collect
-                          funds and organize logistics.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Velotric-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt tourism fintech">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.velotricbike.com/">
-                  <img src="img/portfolio/velotric.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Verlotric</h2>
-                      <p><span>Premium electronic bike at affordable price.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Saltalk-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.saltalk.com/">
-                  <img src="img/portfolio/saltalk.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>Saltalk</h2>
-                      <p><span>Saltalk operates highly automated ghost kitchens to enable virtual restaurant to deliver premium food and happiness in an affordable way.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!--Onepiece-->
-          <div class="col-xs-12 col-sm-6 col-md-4 mt">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.onepiecework.com/">
-                  <img src="img/portfolio/onepiece.png" alt="" />
-                  <div class="overlay">
-                    <div class="details">
-                      <h2>OnePiece Work</h2>
-                      <p><span>OnePiece Work offers serviced space, private phone booths, conference and meeting rooms,
-                          and cross-border co-working office spaces.</span></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Portfolio container End-->
         </div>
-        <!-- End .row -->
-
+        Repeat similar project items for other portfolio companies -->
       </div>
-      <!-- end .container -->
+    </div>
   </section>
-  <!-- Section : Portfolio end -->
+  <!-- Section: Portfolio end -->
 
-  <!-- team -->
-  <section id="team" class="section">
+  <!-- Section: Team -->
+  <section id="team" class="section py-5">
     <div class="container">
-
-      <div class="section-title">
+      <div class="section-title text-center">
         <h2>Our Team</h2>
         <span class="border"></span>
       </div>
-      <!-- end .section-title -->
-
-
-
-      <!-- credits container -->
-      <div class="credits-container">
-
-        <div class="row">
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/yu-tianyi-704924107/">
-                  <img src="img/team/sky.png" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Tianyi (Sky) Yu</h3>
-                      <h2>General Partner</h2>
-                      <p>
-                        <span>
-                          Sky has been an active angel investor since 2015, and an LP of Berkeley Catalyst Fund. <br />
-                          Early investor of Lighteligence (unicorn), Xtalpi (unicorn), Butlr and Easy Transfer.<br />
-                          2019 AACYF "30 Under 30", and a member of MIT Alumni Angels Boston.<br />
-                          MBA - NYU Stern, BS in Math - BU.<br />sky@taihill.vc</span>
-                      </p>
-                    </div>
+      <div class="row g-4" id="team-items">
+        <!-- Team items will be generated dynamically -->
+        <!-- 
+        <div class="col-sm-6 col-md-4">
+          <div class="project-item">
+            <div class="project-image">
+              <a href="https://www.linkedin.com/in/yu-tianyi-704924107/" target="_blank">
+                <img src="img/team/sky.png" alt="Tianyi Sky Yu" class="img-fluid">
+                <div class="overlay">
+                  <div class="details">
+                    <h2>Tianyi (Sky) Yu</h2>
+                    <h3>General Partner</h3>
+                    <p>General Partner at Taihill Venture with a focus on deeptech investments.</p>
                   </div>
-                </a>
-              </div>
-              <!-- end .project-image -->
-            </div>
-            <!-- end .project-item -->
-          </div>
-          <!-- end .col-xs-12 col-sm-6 col-md-4 -->
-
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/hongkaihe/">
-                  <img src="img/team/hongkai3.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Hongkai He</h3>
-                      <h2>General Partner</h2>
-                      <p>
-                        <span>Hongkai was a two-time tech founder before joining Taihill. Early investor of Revela (10x exited in 2yr), Cider (unicorn), Kula Bio, CacheDNA, LASE, and Databento. His non-profit roles include VP of the US-China Health Summit and advisor in Boston Ballet.
-                          <br>MS in IEOR - Columbia University, MS&BS in Math&CS - Sun Yat-Sen University. hongkai@taihill.vc</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
+                </div>
+              </a>
             </div>
           </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/jingjingchai/">
-                  <img src="img/team/Jingjing2.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Jingjing Chai</h3>
-                      <h2>General Partner</h2>
-                      <p>
-                        <span>
-                          Jingjing was a Controller in NorthBridge Partners. Former Co-President of MIT-CHIEF.
-                          Former Vice Secretary General of Chinese Culture Promotion Society - Media Lab. ALM in Finance
-                          - Harvard University. <br />
-                          BS in management - Nanjing University.<br />
-                          jc@taihill.vc</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
         </div>
-        <div class="row">
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/tianmeng-xu-185935196/">
-                  <img src="img/team/tianmeng.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Tianmeng Xu</h3>
-                      <h2>Founding Partner</h2>
-                      <p>
-                        <span> Forbes 60 Outstanding Chinese in North America. Early investor of Xtalpi, InnoCare
-                          Pharma, Kula Bio, Transcenta Holding,
-                          BioKangtai, JD Logistics, and Kuaishou. She has worked for the China Securities Regulatory
-                          Commission, Shanghai Stock Exchange,
-                          and Chengwei Capital.<br>MBA Candidate, and MIA in Economic and Political Development -
-                          Columbia University.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/xuechen-robert-zhao-467111106">
-                  <img src="img/team/xuechen2.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Xuechen (Robert) Zhao</h3>
-                      <h2>Founding Partner</h2>
-                      <p>
-                        <span>Forbes 30 Under 30. Robert is a serial entrepreneur in TMT and Biotech industries.
-                          An early investor in Bioscience, Xtalpi, Resolute Bio, and Kula Bio. Founder&CEO of
-                          Regenerative Bio
-                          backed by IMO Ventures, 5Y Capital, and K2VC.
-                          <br>MS in Management in Entrepreneurial Leadership, Babson
-                          College.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <!-- end .project-image -->
-            </div>
-            <!-- end .project-item -->
-          </div>
-          <!-- end .col-xs-12 col-sm-6 col-md-4 -->
-
-
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/mikel-badiola-10a95b16a/">
-                  <img src="img/team/Mikel.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Mikel Badiola</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>Mikel has experience working on M&A, business development and International Trade, with a
-                          vast network of investors, entrepreneurs and businessmen in Europe and Asia. <br />
-                          MS in Entrepreneurial Leadership - Babson College, BS in Management - Deusto
-                          University</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-
-
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="">
-                  <img src="img/team/davidwang.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>David Wang</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>David is the Co-Founder & CEO of Feellove Capital, an AI hedge fund leveraging SOTA technologies to make strategic investments. He is also an angel investor focused on AI/robotics.
-                          MS in CS - UCLA, BS in CS&Business - UIUC <br/>
-                          davidwang@taihill.vc</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- end .col-xs-12 col-sm-6 col-md-4 -->
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/xudong-lv/">
-                  <img src="img/team/xudong.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Xudong Lv</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>Xudong Lv, is a research scholar focusing on AMO physics. He obtained his PhD at UC
-                          Berkeley,
-                          BS in physics and BA in economics at Peking University.
-                          He is also a serial entrepreneur in tech industry and an NPO leader.
-                          He is the chair of GCEA (Global Chinese Entrepreneurs Alliance) and a
-                          board member of CEO (Chinese Entrepreneurs Organization).</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="">
-                  <img src="img/team/xiuya2.JPG" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Xiuya Gang</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>Xiuya was a data analyst in Hong Kong X-Tech Startup Platform (founded by Sequoia China and top HK universities), supporting investment decisions. 
-                          She also has working experience in TechAsia Society and People's Daily Hong Kong. 
-                          <br />BS in Economics and Math with minor in Business Studies at New York University.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>          
-          <!-- end .col-xs-12 col-sm-6 col-md-4 -->
-
-        </div>
-
-        <div class="row">
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/rickihuang12/">
-                  <img src="img/team/ricki.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Ricki Huang</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>
-                          Ricki is currently working at Ernest & Young where she is focused on Financial and Risk
-                          Management. <br />
-                          She was previously an Investment Manager at Skylight Investment and a Portfolio Analyst at
-                          Babson College’s fund focusing on the financial sector and REITs.<br />
-                          BS in Entrepreneurship and Finance - Babson College
-                          </span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank">
-                  <img src="img/team/fawaz.jpeg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Fawaz Al Shawwa</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>
-                          Previously worked at Investment Banks in New York, Dubai and Kuwait, structuring and closing
-                          Private Equity Real Estate deals.
-                          Experience in startup development and investment in the US, Asia and the Middle East. Member
-                          of YPO YNG+. <br />
-                          MS Entrepreneurial Leadership - Babson College, BA International Relations - Northeastern
-                          University </span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/raed-attia-8247ba117/">
-                  <img src="img/team/Raed_3.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Raed Attia</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>
-                          Currently a Human Capital Consultant at Deloitte, specializing in Organizational Transformation, Change Management, 
-                          and Workforce Development. He has extensive experience in digital transformation for clients in Life Sciences as well 
-                          as Technology, Media, and Telecommunications sectors.</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <!-- End .row -->
-
-
-        <div class="row">
-
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="project-item">
-              <div class="project-image">
-                <a target="_blank" href="https://www.linkedin.com/in/meganwang04/">
-                  <img src="img/team/megan.jpg" alt=""></img>
-                  <div class="overlay">
-                    <div class="details">
-                      <h3>Megan Wang</h3>
-                      <h2>Venture Partner</h2>
-                      <p>
-                        <span>
-                          Megan has been passionate about startups since high school when she created a 
-                          smart AI trashcan and software system. Since then, she has worked with several startups, 
-                          including Product Growth and Data at Cider and Business Development at Galaxea AI. <br/>
-                          BA in Economics & Mathematics - Barnard College, Columbia University
-                          </span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <!-- End .row -->
-
+        Repeat similar items for other team members -->
       </div>
-      <!-- credtis container End-->
-
     </div>
-    <!-- end .container -->
-
   </section>
+  <!-- Section: Team end -->
 
   <!-- Footer -->
-  <footer>
-    <div class="footer-bottom">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-md-6 col-xs-12">
-            <p class="copyright">&copy; Copyright 2017-2024 <a href="http://taihill.vc">Taihill Venture</a>
-            </p>
-            <p> Boston Office: 35 Willard St, Cambridge, Massachusetts 02138</p>
-          </div>
-          <!-- end .col-md-6 col-xs-12 -->
-
-
+  <footer class="footer-bottom bg-dark text-light py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-xs-12 text-center text-md-start">
+          <p>&copy; 2017-2024 Taihill Venture</p>
+          <p>Boston Office: 35 Willard St, Cambridge, MA 02138</p>
         </div>
-        <!-- end .row -->
       </div>
-      <!-- end .container -->
     </div>
-    <!-- end .footer-bottom -->
   </footer>
   <!-- Footer end -->
-
-  <!--JavaScript-->
-  <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-  <script type="text/javascript" src="js/appear-min.js"></script>
-  <script type="text/javascript" src="css/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
-  <!--<script type="text/javascript" src="js/bootstrap-3.0.3.min.js"></script>-->
-  <script type="text/javascript" src="js/jquery.easing-1.3.pack-min.js"></script>
-  <script type="text/javascript" src="js/jquery.easypiechart.min.js"></script>
-  <script type="text/javascript" src="js/jquery.form-min.js"></script>
-  <script type="text/javascript" src="js/jquery.isotope.min.js"></script>
-  <script type="text/javascript" src="js/jquery.nav-min.js"></script>
-  <script type="text/javascript" src="js/jquery.parallax-1.1.3-min.js"></script>
-  <script type="text/javascript" src="js/jquery.scrollTo-min.js"></script>
-  <script type="text/javascript" src="js/jquery.sticky-min.js"></script>
-  <script type="text/javascript" src="js/jquery.ufvalidator-1.0.5-min.js"></script>
-  <script type="text/javascript" src="js/owl.carousel-min.js"></script>
-  <script type="text/javascript" src="js/skrollr-min.js"></script>
-  <script type="text/javascript" src="js/tweetscroll/jquery.tweetscroll.js"></script>
-  <script type="text/javascript" src="js/smooth-scroll-min.js"></script>
-  <script type="text/javascript" src="js/scripts.js"></script>
-  <script src="js/modernizr.custom.63321.js"></script>
-
-<!-- AgentX chatbot  
-  <script defer>
-    document.body.appendChild(document.createElement('div')).setAttribute('id','chatBubbleRoot');
-    window.agx = '65ee22cd290feec0cd44449fCnbaGKqwHXEuakLi3STVNZsy0z3yqeufSQPdK48QYAz8jfqD8XbyDLcyok3Cmmco';
-    </script>
-  <script defer src="https://storage.googleapis.com/agentx-cdn-01/agentx-chat.js"></script>
- -->
-<!--
-  <a class="scroll-top" href="#" title="Scroll to top"><i class="fa fa-chevron-up"></i></a>
--->
-
+  
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="js/bootstrap-5.3.0.bundle.min.js"></script>
+  <script src="js/scripts_v2.js"></script>
+  <script src="js/content-manager_v2.js"></script>
 </body>
-
 </html>
