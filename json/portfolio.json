@@ -30,10 +30,10 @@
     "description": "Revela uses nature as a launchpad and applies artificial intelligence (AI) and cutting-edge biotechnology to unlock access to millions of new ingredients."
   },
   {
-    "link": "http://www.manusbio.com/",
-    "image": "img/portfolio/manus_bio.png",
-    "title": "Manus Bio",
-    "description": "Natural ingredients for a sustainable future."
+    "link": "https://www.arklex.ai/",
+    "image": "img/portfolio/ArkleAI.png",
+    "title": "ArkleAI",
+    "description": "Arklex.AI accelerates the development of AI agents with an intelligent, secure, efficient, and enterprise-ready orchestration layer."
   },
   {
     "link": "https://axoft.us/",
@@ -84,16 +84,16 @@
     "description": "10X faster industrial 3D printing solution."
   },
   {
-    "link": "https://3eohealth.com/",
-    "image": "img/portfolio/3EO.png",
-    "title": "3EO Health",
-    "description": "3EO is the first option for physicians and consumers to deliver the real-time, PCR-level performance of molecular diagnostics at the cost of antigen tests."
-  },
-  {
     "link": "https://anthology.bio/",
     "image": "img/portfolio/anthology.png",
     "title": "Anthology",
     "description": "Anthology is an evolution company generating diverse genomes to scale and digitalize biomanufacturing. It unlocks new possibilities for biomanufacturing by accelerating the speed of genetic mutations and selection in fungi, autotrophic bacteria, and plants."
+  },
+  {
+    "link": "http://www.manusbio.com/",
+    "image": "img/portfolio/manus_bio.png",
+    "title": "Manus Bio",
+    "description": "Natural ingredients for a sustainable future."
   },
   {
     "link": "https://www.sylvaticabio.com/",
@@ -118,6 +118,12 @@
     "image": "img/portfolio/enrich.png",
     "title": "Enrich Biosystems",
     "description": "Enrich develops a groundbreaking microfluidics-free cell discovery platform to enable a streamlined workflow of cell co-culturing, kinetics profiling, and guided capturing based on cell functions."
+  },
+  {
+    "link": "https://3eohealth.com/",
+    "image": "img/portfolio/3EO.png",
+    "title": "3EO Health",
+    "description": "3EO is the first option for physicians and consumers to deliver the real-time, PCR-level performance of molecular diagnostics at the cost of antigen tests."
   },
   {
     "link": "https://www.relativityspace.com/",
