@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endless Raiden Game - Staryu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a2e;
+            margin: 0;
+            font-family: 'Press Start 2P', cursive;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 5px solid #4a4a8a;
+            background-color: #0f0f1a;
+            box-shadow: 0 0 20px rgba(74, 74, 138, 0.7);
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        canvas {
+            display: block;
+            background-color: #000;
+            max-width: 100%;
+            max-height: 80vh;
+            aspect-ratio: 3 / 4;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        #uiContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc;
+        }
+
+        #uiContainer>div {
+            flex-basis: 33%;
+        }
+
+        #uiContainer #score {
+            text-align: left;
+        }
+
+        #uiContainer #level {
+            text-align: center;
+        }
+
+        #uiContainer #lives {
+            text-align: right;
+            color: red;
+            font-size: 18px;
+        }
+
+        .messageBox {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            display: none;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 350px;
+        }
+
+        .messageBox button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px black;
+            transition: all 0.1s ease;
+            margin-left: 5px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .messageBox button:active {
+            transform: translateY(3px);
+        }
+
+        #gameOverBox {
+            color: #ff4d4d;
+            border: 3px solid #ff4d4d;
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+        }
+
+        #gameOverBox button {
+            background-color: #4CAF50;
+            box-shadow: 0 4px #388E3C;
+        }
+
+        #gameOverBox button:active {
+            box-shadow: 0 1px #388E3C;
+        }
+
+        #pauseMenu {
+            color: #4da6ff;
+            border: 3px solid #4da6ff;
+            box-shadow: 0 0 15px rgba(77, 166, 255, 0.6);
+        }
+
+        #resumeButton {
+            background-color: #ffae42;
+            box-shadow: 0 4px #cc8400;
+        }
+
+        #resumeButton:active {
+            box-shadow: 0 1px #cc8400;
+        }
+
+        #pauseRestartButton {
+            background-color: #4CAF50;
+            box-shadow: 0 4px #388E3C;
+        }
+
+        #pauseRestartButton:active {
+            box-shadow: 0 1px #388E3C;
+        }
+
+        .sound-toggle-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .sound-toggle-container button {
+            font-size: 12px;
+            padding: 8px 12px;
+            min-width: 130px;
+            box-sizing: border-box;
+        }
+
+        .sound-toggle-on {
+            background-color: #34a853;
+            box-shadow: 0 4px #2a8c4a;
+        }
+
+        .sound-toggle-on:active {
+            box-shadow: 0 1px #2a8c4a;
+        }
+
+        .sound-toggle-off {
+            background-color: #ea4335;
+            box-shadow: 0 4px #b33021;
+        }
+
+        .sound-toggle-off:active {
+            box-shadow: 0 1px #b33021;
+        }
+
+        #controlsInfo {
+            margin-top: 15px;
+            font-size: 10px;
+            color: #aaa;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="gameContainer">
+        <div id="uiContainer">
+            <div id="score">Score: 0</div>
+            <div id="level">lv 1</div>
+            <div id="lives">❤️❤️❤️</div>
+        </div>
+        <canvas id="gameCanvas" width="450" height="600"></canvas>
+        <div id="gameOverBox" class="messageBox">
+            <div>Game Over!</div>
+            <div id="finalScore">Final Score: 0</div>
+            <button id="restartButton">Restart</button>
+        </div>
+        <div id="pauseMenu" class="messageBox">
+            <div>Paused</div>
+            <div>
+                <button id="resumeButton">Resume</button>
+                <button id="pauseRestartButton">Restart</button>
+            </div>
+            <div class="sound-toggle-container">
+                <button id="shootSoundToggle">Shoot FX: OFF</button>
+                <button id="hitSoundToggle">Hit FX: ON</button>
+            </div>
+        </div>
+        <div id="controlsInfo">
+            Controls: Arrow Keys (Move), Space (Shoot), Esc (Pause)
+        </div>
+    </div>
+
+    <script>
+        // Global reference for the animation frame
+        let animationFrameId = null;
+        // Global references to DOM elements
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
+        const livesDisplay = document.getElementById('lives');
+        const gameOverBox = document.getElementById('gameOverBox');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const restartButton = document.getElementById('restartButton');
+        const pauseMenu = document.getElementById('pauseMenu');
+        const resumeButton = document.getElementById('resumeButton');
+        const pauseRestartButton = document.getElementById('pauseRestartButton');
+        const shootSoundToggleButton = document.getElementById('shootSoundToggle');
+        const hitSoundToggleButton = document.getElementById('hitSoundToggle');
+
+        // --- Sound Setup (Global) ---
+        let soundsReady = false;
+        let shootSoundEnabled = false; // Changed default to false
+        let explosionSoundEnabled = true;
+        let playerHitSoundEnabled = true;
+
+        const synth = new Tone.Synth().toDestination();
+        const metalSynth = new Tone.MetalSynth({ frequency: 100, envelope: { attack: 0.001, decay: 0.1, release: 0.1 }, harmonicity: 3.1, modulationIndex: 16, resonance: 2000, octaves: 0.5 }).toDestination();
+        const noiseSynth = new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0 } }).toDestination();
+
+        function playShootSound() { if (!shootSoundEnabled || !soundsReady) return; try { synth.triggerAttackRelease("E5", "16n"); } catch (e) { console.error("Shoot sound error:", e); } }
+        function playExplosionSound() { if (!explosionSoundEnabled || !soundsReady) return; try { metalSynth.triggerAttackRelease("8n"); } catch (e) { console.error("Explosion sound error:", e); } }
+        function playPlayerHitSound() { if (!explosionSoundEnabled || !soundsReady) return; try { noiseSynth.triggerAttackRelease("8n"); } catch (e) { console.error("Player hit sound error:", e); } }
+
+        function initializeAudio() { if (Tone.context.state !== 'running') { Tone.start().then(() => { soundsReady = true; }).catch(e => { console.error("Failed to start AudioContext:", e); }); } else { soundsReady = true; } }
+        document.body.addEventListener('click', initializeAudio, { once: true });
+        document.body.addEventListener('keydown', initializeAudio, { once: true });
+
+        // --- Player Image Loading (Global) ---
+        const playerImage = new Image();
+        let playerImageLoaded = false;
+        playerImage.onload = () => { playerImageLoaded = true; };
+        playerImage.onerror = () => { console.error("Failed to load player image (Staryu). Using fallback."); };
+        playerImage.src = 'https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/120.png'; // Staryu
+
+        const playerEvolvedImage = new Image();
+        let playerEvolvedImageLoaded = false;
+        playerEvolvedImage.onload = () => { playerEvolvedImageLoaded = true; };
+        playerEvolvedImage.onerror = () => { console.error("Failed to load evolved player image (Starmie). Using fallback."); };
+        playerEvolvedImage.src = 'https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/121.png'; // Starmie
+
+        // --- Named Event Handlers References (needed for removal) ---
+        let handleKeyDownRef; let handleKeyUpRef; let handleRestartClickRef;
+        let handleResumeClickRef; let handlePauseRestartClickRef;
+        let handleShootToggleRef; let handleHitToggleRef;
+
+        // --- Main Game Initialization Function ---
+        function initGame() {
+            console.log("Initializing game...");
+
+            // --- Game State Variables (Re-initialized) ---
+            let score = 0; let level = 1; let lives = 3; let gameOver = false; let isPaused = false;
+            let gameRunning = true; let enemySpawnTimer = 0; let baseEnemySpawnRate = 100;
+            let levelUpScore = 1000; const keys = {};
+            let isEvolved = false; // Flag for player evolution
+
+            // --- Game Element Objects (Re-initialized) ---
+            const player = { x: canvas.width / 2 - 20, y: canvas.height - 60, width: 40, height: 40, speed: 5, dx: 0, dy: 0, shootCooldown: 0, shootDelay: 15, fallbackColor: '#B89CFE', invulnerable: false, invulnerableTimer: 0 };
+            const bullets = []; const enemies = []; const enemyBullets = [];
+            const enemyEmojis = ['👻', '😈', '👾', '👽', '🤖', '🐙', '🦂'];
+
+            // --- Clear Previous Listeners ---
+            // Called by restartGame *before* initGame is called again.
+            // removeGameListeners(); // No longer needed here if restart reloads page
+
+            // --- Define Event Handlers ---
+            handleKeyDownRef = function handleKeyDown(e) {
+                if (e.code === 'Escape') { e.preventDefault(); if (!gameOver) { togglePause(); } }
+                if (gameRunning && !isPaused) { keys[e.code] = true; if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) { e.preventDefault(); } }
+            };
+            handleKeyUpRef = function handleKeyUp(e) { keys[e.code] = false; };
+            // Assign the global restartGame function to the click handlers
+            handleRestartClickRef = restartGame;
+            handlePauseRestartClickRef = restartGame;
+            // Other handlers
+            handleResumeClickRef = function handleResumeClick() { resumeGame(); };
+            handleShootToggleRef = function handleShootToggle() { shootSoundEnabled = !shootSoundEnabled; updateSoundTogglesUI(); };
+            handleHitToggleRef = function handleHitToggle() { explosionSoundEnabled = !explosionSoundEnabled; updateSoundTogglesUI(); };
+
+            // --- Add Event Listeners ---
+            // Listeners are added ONCE per initGame call
+            document.addEventListener('keydown', handleKeyDownRef);
+            document.addEventListener('keyup', handleKeyUpRef);
+            if (restartButton) restartButton.addEventListener('click', handleRestartClickRef);
+            if (resumeButton) resumeButton.addEventListener('click', handleResumeClickRef);
+            if (pauseRestartButton) pauseRestartButton.addEventListener('click', handlePauseRestartClickRef);
+            if (shootSoundToggleButton) shootSoundToggleButton.addEventListener('click', handleShootToggleRef);
+            if (hitSoundToggleButton) hitSoundToggleButton.addEventListener('click', handleHitToggleRef);
+
+            // --- Game Logic Functions (Defined within initGame scope) ---
+            function updateSoundTogglesUI() {
+                if (shootSoundToggleButton) { shootSoundToggleButton.textContent = `Shoot FX: ${shootSoundEnabled ? 'ON' : 'OFF'}`; shootSoundToggleButton.classList.toggle('sound-toggle-on', shootSoundEnabled); shootSoundToggleButton.classList.toggle('sound-toggle-off', !shootSoundEnabled); }
+                if (hitSoundToggleButton) { hitSoundToggleButton.textContent = `Hit FX: ${explosionSoundEnabled ? 'ON' : 'OFF'}`; hitSoundToggleButton.classList.toggle('sound-toggle-on', explosionSoundEnabled); hitSoundToggleButton.classList.toggle('sound-toggle-off', !explosionSoundEnabled); }
+            }
+            function updateLivesDisplay() { if (livesDisplay) { const heartEmoji = '❤️'; const displayLives = Math.max(0, lives); livesDisplay.textContent = heartEmoji.repeat(displayLives); } }
+            function togglePause() { if (gameOver) return; isPaused = !isPaused; if (isPaused) { gameRunning = false; updateSoundTogglesUI(); if (pauseMenu) pauseMenu.style.display = 'block'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } } else { resumeGame(); } }
+            function resumeGame() { if (!gameOver) { isPaused = false; gameRunning = true; if (pauseMenu) pauseMenu.style.display = 'none'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } animationFrameId = requestAnimationFrame(gameLoop); } }
+            function drawPlayer() {
+                if (player.invulnerable && Math.floor(player.invulnerableTimer / 6) % 2 === 0) { return; }
+                let currentImage = playerImage;
+                let currentImageLoaded = playerImageLoaded;
+                if (isEvolved) {
+                    currentImage = playerEvolvedImage;
+                    currentImageLoaded = playerEvolvedImageLoaded;
+                }
+
+                if (currentImageLoaded) {
+                    ctx.drawImage(currentImage, player.x, player.y, player.width, player.height);
+                } else {
+                    // Fallback drawing if the correct image hasn't loaded
+                    ctx.fillStyle = player.fallbackColor;
+                    ctx.beginPath();
+                    ctx.arc(player.x + player.width / 2, player.y + player.height / 2, player.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            function drawBullets() { ctx.fillStyle = '#7DF9FF'; bullets.forEach(bullet => { ctx.beginPath(); ctx.arc(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2, bullet.width / 1.5, 0, Math.PI * 2); ctx.fill(); }); ctx.fillStyle = '#9933FF'; enemyBullets.forEach(bullet => { ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
+            function drawEnemies() { enemies.forEach(enemy => { ctx.font = `${enemy.height * 0.8}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(enemy.emoji, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2); }); }
+            function updatePlayer() { if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } } player.dx = 0; player.dy = 0; if (keys['ArrowLeft'] && player.x > 0) player.dx = -player.speed; if (keys['ArrowRight'] && player.x < canvas.width - player.width) player.dx = player.speed; if (keys['ArrowUp'] && player.y > 0) player.dy = -player.speed; if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.dy = player.speed; player.x += player.dx; player.y += player.dy; if (player.shootCooldown > 0) player.shootCooldown--; if (keys['Space'] && player.shootCooldown === 0 && !player.invulnerable) { shoot(); player.shootCooldown = player.shootDelay; } }
+            function shoot() {
+                const bulletWidth = 8;
+                const bulletHeight = 8;
+                const bulletSpeed = 9;
+                const bulletY = player.y;
+
+                if (isEvolved) { // Level 4+
+                    const bulletXOffset = player.width / 4; // Offset for two bullets
+                    const bullet1 = { x: player.x + bulletXOffset - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
+                    const bullet2 = { x: player.x + player.width - bulletXOffset - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
+                    bullets.push(bullet1, bullet2);
+                } else { // Level 1-3
+                    const bullet = { x: player.x + player.width / 2 - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
+                    bullets.push(bullet);
+                }
+                playShootSound();
+            }
+            function enemyShoot(enemy) { const bulletWidth = 7; const bulletHeight = 14; const bullet = { x: enemy.x + enemy.width / 2 - bulletWidth / 2, y: enemy.y + enemy.height, width: bulletWidth, height: bulletHeight, speed: 4 + level * 0.25 }; enemyBullets.push(bullet); }
+            function updateBullets() { for (let i = bullets.length - 1; i >= 0; i--) { bullets[i].y -= bullets[i].speed; if (bullets[i].y + bullets[i].height < 0) { bullets.splice(i, 1); } } for (let i = enemyBullets.length - 1; i >= 0; i--) { enemyBullets[i].y += enemyBullets[i].speed; if (enemyBullets[i].y > canvas.height) { enemyBullets.splice(i, 1); } } }
+            function spawnEnemy() { const enemySize = 35; const randomEmoji = enemyEmojis[Math.floor(Math.random() * enemyEmojis.length)]; const enemy = { x: Math.random() * (canvas.width - enemySize), y: -enemySize, width: enemySize, height: enemySize, speed: 1.5 + level * 0.3, emoji: randomEmoji, shootCooldown: Math.random() * 80 + 40 }; enemies.push(enemy); }
+            function updateEnemies() { const currentSpawnRate = Math.max(15, baseEnemySpawnRate - level * 6); enemySpawnTimer++; if (enemySpawnTimer >= currentSpawnRate) { spawnEnemy(); enemySpawnTimer = 0; } for (let i = enemies.length - 1; i >= 0; i--) { const enemy = enemies[i]; enemy.y += enemy.speed; enemy.shootCooldown--; if (enemy.shootCooldown <= 0 && enemy.y > 10 && enemy.y < canvas.height * 0.65) { enemyShoot(enemy); enemy.shootCooldown = Math.max(25, 100 + Math.random() * 80 - level * 4); } if (enemy.y > canvas.height) { enemies.splice(i, 1); } } }
+            function checkCollisions() { for (let i = bullets.length - 1; i >= 0; i--) { if (!bullets[i]) continue; for (let j = enemies.length - 1; j >= 0; j--) { if (!enemies[j]) continue; if (isColliding(bullets[i], enemies[j])) { enemies.splice(j, 1); bullets.splice(i, 1); score += 100; updateScore(); playExplosionSound(); break; } } } if (player.invulnerable) { return; } for (let i = enemyBullets.length - 1; i >= 0; i--) { if (isColliding(enemyBullets[i], player)) { enemyBullets.splice(i, 1); handlePlayerHit(); return; } } for (let i = enemies.length - 1; i >= 0; i--) { if (!enemies[i]) continue; if (isColliding(enemies[i], player)) { enemies.splice(i, 1); playExplosionSound(); handlePlayerHit(); return; } } }
+            function isColliding(rect1, rect2) { if (!rect1 || !rect2) return false; return rect1.x < rect2.x + rect2.width && rect1.x + rect1.width > rect2.x && rect1.y < rect2.y + rect2.height && rect1.y + rect1.height > rect2.y; }
+            function updateScore() {
+                if (scoreDisplay) scoreDisplay.textContent = `Score: ${score}`;
+                if (scoreDisplay && score >= levelUpScore) {
+                    level++;
+                    levelUpScore += (1000 + level * 100); // Original level up logic
+                    if (levelDisplay) levelDisplay.textContent = `lv ${level}`; // Changed "Level: " to "lv "
+                    if (level >= 5 && !isEvolved) {
+                        isEvolved = true;
+                        console.log("Player Evolved to Starmie!");
+                        // Optionally increase player size slightly or adjust other stats
+                        // player.width = 45; player.height = 45;
+                    }
+                }
+            }
+            function triggerGameOver() { gameOver = true; gameRunning = false; if (finalScoreDisplay) finalScoreDisplay.textContent = `Final Score: ${score}`; if (gameOverBox) gameOverBox.style.display = 'block'; if (pauseMenu) pauseMenu.style.display = 'none'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } }
+            function handlePlayerHit() { if (player.invulnerable) return; lives--; updateLivesDisplay(); playPlayerHitSound(); if (lives <= 0) { triggerGameOver(); } else { player.invulnerable = true; player.invulnerableTimer = 120; const clearRadius = 75; for (let i = enemyBullets.length - 1; i >= 0; i--) { const bullet = enemyBullets[i]; const dx = (bullet.x + bullet.width / 2) - (player.x + player.width / 2); const dy = (bullet.y + bullet.height / 2) - (player.y + player.height / 2); if (Math.sqrt(dx * dx + dy * dy) < clearRadius) { enemyBullets.splice(i, 1); } } } }
+            function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+            function gameLoop() {
+                if (gameRunning) {
+                    clearCanvas(); updatePlayer(); updateBullets(); updateEnemies(); checkCollisions();
+                    drawPlayer(); drawBullets(); drawEnemies();
+                    animationFrameId = requestAnimationFrame(gameLoop);
+                }
+            }
+
+            // --- Initial Setup for this instance ---
+            updateScore(); updateLivesDisplay();
+            if (levelDisplay) levelDisplay.textContent = `lv ${level}`; // Changed "Level: " to "lv "
+            updateSoundTogglesUI();
+            gameRunning = true;
+            if (gameOverBox) gameOverBox.style.display = 'none';
+            if (pauseMenu) pauseMenu.style.display = 'none';
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(gameLoop);
+
+        } // --- End of initGame Function ---
+
+        // --- Global Functions ---
+        // No longer needed if restart reloads page
+        // function removeGameListeners() { /* ... */ }
+
+        // --- MODIFIED restartGame Function ---
+        function restartGame() {
+            console.log("Restart button clicked! Reloading page...");
+            // Simple page reload for a guaranteed clean restart
+            window.location.reload();
+        }
+        // --- END MODIFIED restartGame Function ---
+
+        // --- Assign the main initializer to window.onload ---
+        window.onload = initGame;
+
+    </script>
+</body>
+
+</html>
