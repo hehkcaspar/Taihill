@@ -41,6 +41,7 @@
             aspect-ratio: 3 / 4;
             border-radius: 10px;
             box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+            touch-action: none;
         }
 
         #uiContainer {
@@ -185,6 +186,75 @@
             color: #aaa;
             text-align: center;
         }
+
+        #touchControls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            display: none;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .touch-control {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(128, 128, 128, 0.2);
+            pointer-events: auto;
+            transition: background-color 0.1s ease;
+        }
+
+        .touch-control.active {
+            background-color: rgba(128, 128, 128, 0.5);
+        }
+
+        #joystickBase {
+            bottom: 15px;
+            left: 15px;
+            width: 80px;
+            height: 80px;
+        }
+
+        #joystickKnob {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(200, 200, 200, 0.3);
+            border-radius: 50%;
+            top: 20px;
+            left: 20px;
+            pointer-events: none;
+        }
+
+        #shootButton {
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+        }
+
+        #pauseButton {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(128, 128, 128, 0.3);
+            border-radius: 50%;
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
     </style>
 </head>
 
@@ -196,6 +266,15 @@
             <div id="lives">❤️❤️❤️</div>
         </div>
         <canvas id="gameCanvas" width="450" height="600"></canvas>
+
+        <div id="touchControls">
+            <div id="joystickBase" class="touch-control">
+                <div id="joystickKnob"></div>
+            </div>
+            <div id="shootButton" class="touch-control"></div>
+            <div id="pauseButton">||</div>
+        </div>
+
         <div id="gameOverBox" class="messageBox">
             <div>Game Over!</div>
             <div id="finalScore">Final Score 0</div>
@@ -213,7 +292,7 @@
             </div>
         </div>
         <div id="controlsInfo">
-            Controls: Arrow Keys (Move), Space (Shoot), Esc (Pause)
+            <span id="controlInstructions">Arrow Keys (Move), Space (Shoot), Esc (Pause)</span>
             <div id="eventStatus" style="font-size: 10px; color: yellow; height: 12px; margin-top: 5px;"></div>
         </div>
     </div>
@@ -236,6 +315,12 @@
         const shootSoundToggleButton = document.getElementById('shootSoundToggle');
         const hitSoundToggleButton = document.getElementById('hitSoundToggle');
         const eventStatusDisplay = document.getElementById('eventStatus');
+        const touchControlsContainer = document.getElementById('touchControls');
+        const joystickBase = document.getElementById('joystickBase');
+        const joystickKnob = document.getElementById('joystickKnob');
+        const shootButton = document.getElementById('shootButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const controlInstructionsDisplay = document.getElementById('controlInstructions'); // Added reference
 
         // --- Sound Setup (Global) ---
         let soundsReady = false;
@@ -272,6 +357,14 @@
         let handleKeyDownRef; let handleKeyUpRef; let handleRestartClickRef;
         let handleResumeClickRef; let handlePauseRestartClickRef;
         let handleShootToggleRef; let handleHitToggleRef;
+        let handleJoystickStartRef, handleJoystickMoveRef, handleJoystickEndRef;
+        let handleShootButtonStartRef, handleShootButtonEndRef;
+        let handlePauseButtonTapRef; // Added reference
+
+        // --- Touch Detection ---
+        function isTouchDevice() {
+            return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+        }
 
         // --- Main Game Initialization Function ---
         function initGame() {
@@ -291,6 +384,16 @@
             const keys = {};
             let isEvolved = false; // Player evolution state
             const evolutionLifespan = 70; // Lifespan level for evolution
+
+            // --- Touch Control State ---
+            let touchDevice = isTouchDevice();
+            let joystickActive = false;
+            let joystickTouchId = null;
+            let joystickStartX = 0;
+            let joystickStartY = 0;
+            let shootButtonPressed = false;
+            let currentJoystickRadius = 0; // Will be set in handler
+            let currentMaxJoystickDisplacement = 0; // Will be set in handler
 
             // --- Health Event Variables ---
             let isEventActive = false;
@@ -327,6 +430,83 @@
             handleShootToggleRef = function handleShootToggle() { shootSoundEnabled = !shootSoundEnabled; updateSoundTogglesUI(); };
             handleHitToggleRef = function handleHitToggle() { explosionSoundEnabled = !explosionSoundEnabled; updateSoundTogglesUI(); };
 
+            // --- Touch Event Handlers ---
+            handleJoystickStartRef = function handleJoystickStart(e) {
+                e.preventDefault();
+                if (joystickActive) return; // Only track one touch
+
+                // Calculate dimensions *here* when touch starts
+                currentJoystickRadius = joystickBase.offsetWidth / 2;
+                const currentKnobRadius = joystickKnob.offsetWidth / 2;
+                currentMaxJoystickDisplacement = currentJoystickRadius - currentKnobRadius;
+
+                if (currentJoystickRadius <= 0) { // Safety check if dimensions aren't ready
+                    console.error("Joystick dimensions not ready.");
+                    return;
+                }
+
+                const touch = e.changedTouches[0];
+                joystickTouchId = touch.identifier;
+                joystickActive = true;
+                const rect = joystickBase.getBoundingClientRect();
+                // Calculate center based on current position and radius
+                joystickStartX = rect.left + currentJoystickRadius;
+                joystickStartY = rect.top + currentJoystickRadius;
+                joystickBase.classList.add('active');
+                updateJoystick(touch.clientX, touch.clientY); // Initial update using current touch position
+            };
+
+            handleJoystickMoveRef = function handleJoystickMove(e) {
+                e.preventDefault();
+                if (!joystickActive) return;
+                const touch = Array.from(e.changedTouches).find(t => t.identifier === joystickTouchId);
+                if (touch) {
+                    updateJoystick(touch.clientX, touch.clientY);
+                }
+            };
+
+            handleJoystickEndRef = function handleJoystickEnd(e) {
+                if (!joystickActive) return;
+                const touch = Array.from(e.changedTouches).find(t => t.identifier === joystickTouchId);
+                if (touch) {
+                    joystickActive = false;
+                    joystickTouchId = null;
+                    player.dx = 0; // Stop player movement
+                    player.dy = 0;
+                    joystickKnob.style.transform = `translate(0px, 0px)`; // Reset knob position
+                    joystickBase.classList.remove('active');
+                }
+            };
+
+            handleShootButtonStartRef = function handleShootButtonStart(e) {
+                e.preventDefault();
+                shootButtonPressed = true;
+                shootButton.classList.add('active');
+            };
+
+            handleShootButtonEndRef = function handleShootButtonEnd(e) {
+                e.preventDefault();
+                let stillTouchingButton = false;
+                for (let i = 0; i < e.touches.length; i++) {
+                    const touch = e.touches[i];
+                    const buttonRect = shootButton.getBoundingClientRect();
+                    if (touch.clientX >= buttonRect.left && touch.clientX <= buttonRect.right &&
+                        touch.clientY >= buttonRect.top && touch.clientY <= buttonRect.bottom) {
+                        stillTouchingButton = true;
+                        break;
+                    }
+                }
+                if (!stillTouchingButton) {
+                    shootButtonPressed = false;
+                    shootButton.classList.remove('active');
+                }
+            };
+
+            handlePauseButtonTapRef = function handlePauseButtonTap(e) {
+                e.preventDefault(); // Prevent potential double actions
+                togglePause();
+            };
+
             // --- Add Event Listeners ---
             document.addEventListener('keydown', handleKeyDownRef);
             document.addEventListener('keyup', handleKeyUpRef);
@@ -335,6 +515,30 @@
             if (pauseRestartButton) pauseRestartButton.addEventListener('click', handlePauseRestartClickRef);
             if (shootSoundToggleButton) shootSoundToggleButton.addEventListener('click', handleShootToggleRef);
             if (hitSoundToggleButton) hitSoundToggleButton.addEventListener('click', handleHitToggleRef);
+
+            // --- Add Touch Listeners if applicable ---
+            if (touchDevice) {
+                console.log("Touch device detected, enabling touch controls.");
+                if (touchControlsContainer) touchControlsContainer.style.display = 'block';
+                if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Move, Pause, Shoot'; // Update controls text
+
+                joystickBase.addEventListener('touchstart', handleJoystickStartRef, { passive: false });
+                joystickBase.addEventListener('touchmove', handleJoystickMoveRef, { passive: false });
+                joystickBase.addEventListener('touchend', handleJoystickEndRef, { passive: false });
+                joystickBase.addEventListener('touchcancel', handleJoystickEndRef, { passive: false });
+
+                shootButton.addEventListener('touchstart', handleShootButtonStartRef, { passive: false });
+                shootButton.addEventListener('touchend', handleShootButtonEndRef, { passive: false });
+                shootButton.addEventListener('touchcancel', handleShootButtonEndRef, { passive: false });
+
+                // Add listener for the pause button
+                if (pauseButton) pauseButton.addEventListener('touchstart', handlePauseButtonTapRef, { passive: false });
+
+            } else {
+                console.log("No touch support detected.");
+                if (touchControlsContainer) touchControlsContainer.style.display = 'none';
+                if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Arrow Keys (Move), Space (Shoot), Esc (Pause)'; // Default controls text
+            }
 
             // --- Game Logic Functions (Defined within initGame scope) ---
             function updateSoundTogglesUI() {
@@ -353,10 +557,8 @@
                 if (currentImageLoaded) {
                     ctx.drawImage(currentImage, player.x, player.y, player.width, player.height);
                 } else {
-                    // Fallback drawing if the correct image hasn't loaded
                     ctx.fillStyle = player.fallbackColor;
                     ctx.fillRect(player.x, player.y, player.width, player.height);
-                    // Optionally add a visual indicator for evolved fallback
                     if (isEvolved) {
                         ctx.fillStyle = 'white';
                         ctx.fillRect(player.x + player.width * 0.2, player.y + player.height * 0.2, player.width * 0.6, player.height * 0.6);
@@ -365,6 +567,37 @@
             }
             function drawBullets() { ctx.fillStyle = '#FFFFFF'; bullets.forEach(bullet => { ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); ctx.fillStyle = '#FF4444'; enemyBullets.forEach(bullet => { ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
             function drawEnemies() { enemies.forEach(enemy => { ctx.font = `${enemy.height * 0.8}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(enemy.emoji, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2); }); }
+            function updateJoystick(clientX, clientY) {
+                let deltaX = clientX - joystickStartX;
+                let deltaY = clientY - joystickStartY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                let moveX = deltaX;
+                let moveY = deltaY;
+
+                if (distance > currentMaxJoystickDisplacement) {
+                    const ratio = currentMaxJoystickDisplacement / distance;
+                    moveX = deltaX * ratio;
+                    moveY = deltaY * ratio;
+                }
+
+                joystickKnob.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+                let normalizedX = 0;
+                let normalizedY = 0;
+                if (distance > 5) {
+                    normalizedX = deltaX / distance;
+                    normalizedY = deltaY / distance;
+                }
+
+                let currentSpeed = player.speed;
+                if (isEventActive && currentEvent === 'depression') {
+                    currentSpeed *= depressionMoveFactor;
+                }
+
+                player.dx = normalizedX * currentSpeed;
+                player.dy = normalizedY * currentSpeed;
+            }
             function updatePlayer() {
                 if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } }
 
@@ -376,11 +609,13 @@
                     currentShootDelay *= depressionShootFactor;
                 }
 
-                player.dx = 0; player.dy = 0;
-                if (keys['ArrowLeft'] && player.x > 0) player.dx = -currentSpeed;
-                if (keys['ArrowRight'] && player.x < canvas.width - player.width) player.dx = currentSpeed;
-                if (keys['ArrowUp'] && player.y > 0) player.dy = -currentSpeed;
-                if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.dy = currentSpeed;
+                if (!joystickActive) {
+                    player.dx = 0; player.dy = 0;
+                    if (keys['ArrowLeft'] && player.x > 0) player.dx = -currentSpeed;
+                    if (keys['ArrowRight'] && player.x < canvas.width - player.width) player.dx = currentSpeed;
+                    if (keys['ArrowUp'] && player.y > 0) player.dy = -currentSpeed;
+                    if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.dy = currentSpeed;
+                }
 
                 player.x += player.dx;
                 player.y += player.dy;
@@ -395,7 +630,7 @@
                 player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
 
                 if (player.shootCooldown > 0) player.shootCooldown--;
-                if (keys['Space'] && player.shootCooldown === 0 && !player.invulnerable) {
+                if ((keys['Space'] || shootButtonPressed) && player.shootCooldown === 0 && !player.invulnerable) {
                     shoot();
                     player.shootCooldown = currentShootDelay;
                 }
@@ -406,12 +641,12 @@
                 const bulletSpeed = 7;
                 const bulletY = player.y;
 
-                if (isEvolved) { // Evolved state: Fire two bullets
-                    const bulletXOffset = player.width / 4; // Adjust offset as needed
+                if (isEvolved) {
+                    const bulletXOffset = player.width / 4;
                     const bullet1 = { x: player.x + bulletXOffset - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                     const bullet2 = { x: player.x + player.width - bulletXOffset - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                     bullets.push(bullet1, bullet2);
-                } else { // Base state: Fire one bullet
+                } else {
                     const bullet = { x: player.x + player.width / 2 - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                     bullets.push(bullet);
                 }
@@ -477,7 +712,6 @@
                             enemies[j].health--;
                             bullets.splice(i, 1);
                             if (enemies[j].health <= 0) {
-                                // NEW: Double score if enemy killed during an event
                                 let enemyScore = 100;
                                 if (isEventActive) { enemyScore *= eventScoreMultiplier; }
                                 score += enemyScore;
@@ -519,12 +753,9 @@
                     if (levelDisplay) levelDisplay.textContent = `Lifespan ${lifespan}`;
                     console.log(`Lifespan increased to ${lifespan}. Next at ${lifespanIncreaseScore} score.`);
 
-                    // Check for evolution
                     if (lifespan >= evolutionLifespan && !isEvolved) {
                         isEvolved = true;
                         console.log(`Player Evolved at Lifespan ${lifespan}!`);
-                        // Optional: Adjust player stats on evolution
-                        // player.shootDelay = 12; // Example: Faster shooting
                     }
                 }
             }
@@ -537,7 +768,6 @@
                     let eventName = currentEvent.replace('_', ' ').toUpperCase();
                     let timeLeft = (eventTimer / 60).toFixed(1);
                     eventStatusDisplay.textContent = `${eventName} (${timeLeft}s)`;
-                    // Make the event notification more obvious
                     eventStatusDisplay.style.color = 'white';
                     eventStatusDisplay.style.backgroundColor = '#ff0000';
                     eventStatusDisplay.style.fontSize = '16px';
@@ -548,7 +778,6 @@
                     eventStatusDisplay.style.borderRadius = '5px';
                 } else {
                     eventStatusDisplay.textContent = '';
-                    // Reset inline styles
                     eventStatusDisplay.style.backgroundColor = '';
                     eventStatusDisplay.style.fontSize = '';
                     eventStatusDisplay.style.fontWeight = '';
