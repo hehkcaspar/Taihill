@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ladder of Longivity</title>
-    <link rel="icon" type="image/png" href="./icon/RB_color.png">
+    <title>Endless Raiden Game - Staryu</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
@@ -191,14 +190,14 @@
 <body>
     <div id="gameContainer">
         <div id="uiContainer">
-            <div id="score">Score 0</div>
-            <div id="level">Lifespan 50</div>
+            <div id="score">Score: 0</div>
+            <div id="level">lv 1</div>
             <div id="lives">❤️❤️❤️</div>
         </div>
         <canvas id="gameCanvas" width="450" height="600"></canvas>
         <div id="gameOverBox" class="messageBox">
             <div>Game Over!</div>
-            <div id="finalScore">Final Score 0</div>
+            <div id="finalScore">Final Score: 0</div>
             <button id="restartButton">Restart</button>
         </div>
         <div id="pauseMenu" class="messageBox">
@@ -214,7 +213,6 @@
         </div>
         <div id="controlsInfo">
             Controls: Arrow Keys (Move), Space (Shoot), Esc (Pause)
-            <div id="eventStatus" style="font-size: 10px; color: yellow; height: 12px; margin-top: 5px;"></div>
         </div>
     </div>
 
@@ -235,7 +233,6 @@
         const pauseRestartButton = document.getElementById('pauseRestartButton');
         const shootSoundToggleButton = document.getElementById('shootSoundToggle');
         const hitSoundToggleButton = document.getElementById('hitSoundToggle');
-        const eventStatusDisplay = document.getElementById('eventStatus');
 
         // --- Sound Setup (Global) ---
         let soundsReady = false;
@@ -259,14 +256,14 @@
         const playerImage = new Image();
         let playerImageLoaded = false;
         playerImage.onload = () => { playerImageLoaded = true; };
-        playerImage.onerror = () => { console.error("Failed to load player image (RB_bw.png). Using fallback."); };
-        playerImage.src = './icon/RB_bw.png'; // Base player image
+        playerImage.onerror = () => { console.error("Failed to load player image (Staryu). Using fallback."); };
+        playerImage.src = 'https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/120.png'; // Staryu
 
         const playerEvolvedImage = new Image();
         let playerEvolvedImageLoaded = false;
         playerEvolvedImage.onload = () => { playerEvolvedImageLoaded = true; };
-        playerEvolvedImage.onerror = () => { console.error("Failed to load evolved player image (RB_color.png). Using fallback."); };
-        playerEvolvedImage.src = './icon/RB_color.png'; // Evolved player image
+        playerEvolvedImage.onerror = () => { console.error("Failed to load evolved player image (Starmie). Using fallback."); };
+        playerEvolvedImage.src = 'https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/121.png'; // Starmie
 
         // --- Named Event Handlers References (needed for removal) ---
         let handleKeyDownRef; let handleKeyUpRef; let handleRestartClickRef;
@@ -278,42 +275,19 @@
             console.log("Initializing game...");
 
             // --- Game State Variables (Re-initialized) ---
-            let score = 0;
-            let lifespan = 50; // Changed from level, starts at 50
-            const maxLifespan = 200; // Max lifespan
-            let lives = 3;
-            let gameOver = false;
-            let isPaused = false;
-            let gameRunning = true;
-            let enemySpawnTimer = 0;
-            let baseEnemySpawnRate = 120; // Slightly increased initial spawn rate
-            let lifespanIncreaseScore = 500; // Score needed for +1 lifespan initially
-            const keys = {};
-            let isEvolved = false; // Player evolution state
-            const evolutionLifespan = 70; // Lifespan level for evolution
-
-            // --- Health Event Variables ---
-            let isEventActive = false;
-            let currentEvent = null; // 'heart_attack', 'cancer', 'depression'
-            let eventTimer = 0;
-            const eventDuration = 600; // 5 seconds at 60fps
-            let eventCooldownTimer = 600; // 10 seconds initial cooldown before first event
-            const eventCooldown = 1200; // 20 seconds between events
-            const healthEvents = ['heart_attack', 'cancer', 'depression'];
-            const depressionMoveFactor = 0.4; // Multiplies player speed
-            const depressionShootFactor = 3; // Multiplies shoot delay
-            const cancerEnemyHealth = 5; // Hits needed for cancer enemies
-            const cancerEnemySizeFactor = 2; // Size multiplier for cancer enemies
-            const heartAttackIntensity = 10; // Max pixel shift for heart attack tremble
-            const eventScoreMultiplier = 2; // Score multiplier during events
+            let score = 0; let level = 1; let lives = 3; let gameOver = false; let isPaused = false;
+            let gameRunning = true; let enemySpawnTimer = 0; let baseEnemySpawnRate = 100;
+            let levelUpScore = 1000; const keys = {};
+            let isEvolved = false; // Flag for player evolution
 
             // --- Game Element Objects (Re-initialized) ---
-            const player = { x: canvas.width / 2 - 20, y: canvas.height - 60, width: 35, height: 35, speed: 4, dx: 0, dy: 0, shootCooldown: 0, shootDelay: 18, fallbackColor: '#FF6B6B', invulnerable: false, invulnerableTimer: 0 }; // Adjusted size/speed/delay
-            const bullets = [];
-            const enemies = [];
-            const enemyBullets = [];
-            // Changed enemy emojis to health factors
-            const enemyEmojis = ['🍔', '🚬', '🍺', '🦠', '🤯', '🛋️', '💊', '💉', '💼', '📱', '🥤', '😴', '🏭', '💸', '💔']; // Burger, Smoke, Beer, Virus, Stress, Sedentary, Pill, Syringe, Work, ScreenTime, Soda, Lack Sleep, Pollution, Financial Stress, Loneliness
+            const player = { x: canvas.width / 2 - 20, y: canvas.height - 60, width: 40, height: 40, speed: 5, dx: 0, dy: 0, shootCooldown: 0, shootDelay: 15, fallbackColor: '#B89CFE', invulnerable: false, invulnerableTimer: 0 };
+            const bullets = []; const enemies = []; const enemyBullets = [];
+            const enemyEmojis = ['👻', '😈', '👾', '👽', '🤖', '🐙', '🦂'];
+
+            // --- Clear Previous Listeners ---
+            // Called by restartGame *before* initGame is called again.
+            // removeGameListeners(); // No longer needed here if restart reloads page
 
             // --- Define Event Handlers ---
             handleKeyDownRef = function handleKeyDown(e) {
@@ -321,13 +295,16 @@
                 if (gameRunning && !isPaused) { keys[e.code] = true; if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) { e.preventDefault(); } }
             };
             handleKeyUpRef = function handleKeyUp(e) { keys[e.code] = false; };
+            // Assign the global restartGame function to the click handlers
             handleRestartClickRef = restartGame;
             handlePauseRestartClickRef = restartGame;
+            // Other handlers
             handleResumeClickRef = function handleResumeClick() { resumeGame(); };
             handleShootToggleRef = function handleShootToggle() { shootSoundEnabled = !shootSoundEnabled; updateSoundTogglesUI(); };
             handleHitToggleRef = function handleHitToggle() { explosionSoundEnabled = !explosionSoundEnabled; updateSoundTogglesUI(); };
 
             // --- Add Event Listeners ---
+            // Listeners are added ONCE per initGame call
             document.addEventListener('keydown', handleKeyDownRef);
             document.addEventListener('keyup', handleKeyUpRef);
             if (restartButton) restartButton.addEventListener('click', handleRestartClickRef);
@@ -346,273 +323,100 @@
             function resumeGame() { if (!gameOver) { isPaused = false; gameRunning = true; if (pauseMenu) pauseMenu.style.display = 'none'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } animationFrameId = requestAnimationFrame(gameLoop); } }
             function drawPlayer() {
                 if (player.invulnerable && Math.floor(player.invulnerableTimer / 6) % 2 === 0) { return; }
-
-                let currentImage = isEvolved ? playerEvolvedImage : playerImage;
-                let currentImageLoaded = isEvolved ? playerEvolvedImageLoaded : playerImageLoaded;
+                let currentImage = playerImage;
+                let currentImageLoaded = playerImageLoaded;
+                if (isEvolved) {
+                    currentImage = playerEvolvedImage;
+                    currentImageLoaded = playerEvolvedImageLoaded;
+                }
 
                 if (currentImageLoaded) {
                     ctx.drawImage(currentImage, player.x, player.y, player.width, player.height);
                 } else {
                     // Fallback drawing if the correct image hasn't loaded
                     ctx.fillStyle = player.fallbackColor;
-                    ctx.fillRect(player.x, player.y, player.width, player.height);
-                    // Optionally add a visual indicator for evolved fallback
-                    if (isEvolved) {
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(player.x + player.width * 0.2, player.y + player.height * 0.2, player.width * 0.6, player.height * 0.6);
-                    }
+                    ctx.beginPath();
+                    ctx.arc(player.x + player.width / 2, player.y + player.height / 2, player.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
                 }
             }
-            function drawBullets() { ctx.fillStyle = '#FFFFFF'; bullets.forEach(bullet => { ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); ctx.fillStyle = '#FF4444'; enemyBullets.forEach(bullet => { ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
+            function drawBullets() { ctx.fillStyle = '#7DF9FF'; bullets.forEach(bullet => { ctx.beginPath(); ctx.arc(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2, bullet.width / 1.5, 0, Math.PI * 2); ctx.fill(); }); ctx.fillStyle = '#9933FF'; enemyBullets.forEach(bullet => { ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
             function drawEnemies() { enemies.forEach(enemy => { ctx.font = `${enemy.height * 0.8}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(enemy.emoji, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2); }); }
-            function updatePlayer() {
-                if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } }
-
-                let currentSpeed = player.speed;
-                let currentShootDelay = player.shootDelay;
-
-                if (isEventActive && currentEvent === 'depression') {
-                    currentSpeed *= depressionMoveFactor;
-                    currentShootDelay *= depressionShootFactor;
-                }
-
-                player.dx = 0; player.dy = 0;
-                if (keys['ArrowLeft'] && player.x > 0) player.dx = -currentSpeed;
-                if (keys['ArrowRight'] && player.x < canvas.width - player.width) player.dx = currentSpeed;
-                if (keys['ArrowUp'] && player.y > 0) player.dy = -currentSpeed;
-                if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.dy = currentSpeed;
-
-                player.x += player.dx;
-                player.y += player.dy;
-
-                if (isEventActive && currentEvent === 'heart_attack') {
-                    if (eventTimer % 5 < 2) {
-                        player.x += (Math.random() - 0.5) * heartAttackIntensity;
-                    }
-                }
-
-                player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-                player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
-
-                if (player.shootCooldown > 0) player.shootCooldown--;
-                if (keys['Space'] && player.shootCooldown === 0 && !player.invulnerable) {
-                    shoot();
-                    player.shootCooldown = currentShootDelay;
-                }
-            }
+            function updatePlayer() { if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } } player.dx = 0; player.dy = 0; if (keys['ArrowLeft'] && player.x > 0) player.dx = -player.speed; if (keys['ArrowRight'] && player.x < canvas.width - player.width) player.dx = player.speed; if (keys['ArrowUp'] && player.y > 0) player.dy = -player.speed; if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.dy = player.speed; player.x += player.dx; player.y += player.dy; if (player.shootCooldown > 0) player.shootCooldown--; if (keys['Space'] && player.shootCooldown === 0 && !player.invulnerable) { shoot(); player.shootCooldown = player.shootDelay; } }
             function shoot() {
-                const bulletWidth = 5;
-                const bulletHeight = 10;
-                const bulletSpeed = 7;
+                const bulletWidth = 8;
+                const bulletHeight = 8;
+                const bulletSpeed = 9;
                 const bulletY = player.y;
 
-                if (isEvolved) { // Evolved state: Fire two bullets
-                    const bulletXOffset = player.width / 4; // Adjust offset as needed
+                if (isEvolved) { // Level 4+
+                    const bulletXOffset = player.width / 4; // Offset for two bullets
                     const bullet1 = { x: player.x + bulletXOffset - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                     const bullet2 = { x: player.x + player.width - bulletXOffset - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                     bullets.push(bullet1, bullet2);
-                } else { // Base state: Fire one bullet
+                } else { // Level 1-3
                     const bullet = { x: player.x + player.width / 2 - bulletWidth / 2, y: bulletY, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                     bullets.push(bullet);
                 }
                 playShootSound();
             }
-            function enemyShoot(enemy) {
-                const difficultyLevel = Math.floor((lifespan - 50) / 10) + 1;
-                const bulletWidth = 6; const bulletHeight = 6;
-                const bullet = { x: enemy.x + enemy.width / 2 - bulletWidth / 2, y: enemy.y + enemy.height, width: bulletWidth, height: bulletHeight, speed: 3 + difficultyLevel * 0.2 };
-                enemyBullets.push(bullet);
-            }
+            function enemyShoot(enemy) { const bulletWidth = 7; const bulletHeight = 14; const bullet = { x: enemy.x + enemy.width / 2 - bulletWidth / 2, y: enemy.y + enemy.height, width: bulletWidth, height: bulletHeight, speed: 4 + level * 0.25 }; enemyBullets.push(bullet); }
             function updateBullets() { for (let i = bullets.length - 1; i >= 0; i--) { bullets[i].y -= bullets[i].speed; if (bullets[i].y + bullets[i].height < 0) { bullets.splice(i, 1); } } for (let i = enemyBullets.length - 1; i >= 0; i--) { enemyBullets[i].y += enemyBullets[i].speed; if (enemyBullets[i].y > canvas.height) { enemyBullets.splice(i, 1); } } }
-            function spawnEnemy() {
-                const difficultyLevel = Math.floor((lifespan - 50) / 10) + 1;
-                let enemySize = 30;
-                let enemyHealth = 1;
-                const randomEmoji = enemyEmojis[Math.floor(Math.random() * enemyEmojis.length)];
-
-                if (isEventActive && currentEvent === 'cancer') {
-                    enemySize *= cancerEnemySizeFactor;
-                    enemyHealth = cancerEnemyHealth;
-                }
-
-                const enemy = {
-                    x: Math.random() * (canvas.width - enemySize),
-                    y: -enemySize,
-                    width: enemySize,
-                    height: enemySize,
-                    speed: 1 + difficultyLevel * 0.25,
-                    emoji: randomEmoji,
-                    shootCooldown: Math.random() * 100 + 50,
-                    health: enemyHealth
-                };
-                enemies.push(enemy);
-            }
-            function updateEnemies() {
-                const difficultyLevel = Math.floor((lifespan - 50) / 10) + 1;
-                const currentSpawnRate = Math.max(20, baseEnemySpawnRate - difficultyLevel * 5);
-                enemySpawnTimer++;
-                if (enemySpawnTimer >= currentSpawnRate) {
-                    spawnEnemy();
-                    enemySpawnTimer = 0;
-                }
-                for (let i = enemies.length - 1; i >= 0; i--) {
-                    const enemy = enemies[i];
-                    enemy.y += enemy.speed;
-                    enemy.shootCooldown--;
-                    if (enemy.shootCooldown <= 0 && enemy.y > 10 && enemy.y < canvas.height * 0.65) {
-                        enemyShoot(enemy);
-                        enemy.shootCooldown = Math.max(30, 120 + Math.random() * 100 - difficultyLevel * 5);
-                    }
-                    if (enemy.y > canvas.height) {
-                        enemies.splice(i, 1);
-                    }
-                }
-            }
-            function checkCollisions() {
-                for (let i = bullets.length - 1; i >= 0; i--) {
-                    if (!bullets[i]) continue;
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        if (!enemies[j]) continue;
-                        if (isColliding(bullets[i], enemies[j])) {
-                            enemies[j].health--;
-                            bullets.splice(i, 1);
-                            if (enemies[j].health <= 0) {
-                                // NEW: Double score if enemy killed during an event
-                                let enemyScore = 100;
-                                if (isEventActive) { enemyScore *= eventScoreMultiplier; }
-                                score += enemyScore;
-                                updateScore();
-                                playExplosionSound();
-                                enemies.splice(j, 1);
-                            }
-                            break;
-                        }
-                    }
-                }
-                if (player.invulnerable) { return; }
-                for (let i = enemyBullets.length - 1; i >= 0; i--) {
-                    if (isColliding(enemyBullets[i], player)) {
-                        enemyBullets.splice(i, 1);
-                        handlePlayerHit();
-                        return;
-                    }
-                }
-                for (let i = enemies.length - 1; i >= 0; i--) {
-                    if (!enemies[i]) continue;
-                    if (isColliding(enemies[i], player)) {
-                        handlePlayerHit();
-                        enemies[i].health -= 2;
-                        if (enemies[i].health <= 0) {
-                            enemies.splice(i, 1);
-                            playExplosionSound();
-                        }
-                        return;
-                    }
-                }
-            }
+            function spawnEnemy() { const enemySize = 35; const randomEmoji = enemyEmojis[Math.floor(Math.random() * enemyEmojis.length)]; const enemy = { x: Math.random() * (canvas.width - enemySize), y: -enemySize, width: enemySize, height: enemySize, speed: 1.5 + level * 0.3, emoji: randomEmoji, shootCooldown: Math.random() * 80 + 40 }; enemies.push(enemy); }
+            function updateEnemies() { const currentSpawnRate = Math.max(15, baseEnemySpawnRate - level * 6); enemySpawnTimer++; if (enemySpawnTimer >= currentSpawnRate) { spawnEnemy(); enemySpawnTimer = 0; } for (let i = enemies.length - 1; i >= 0; i--) { const enemy = enemies[i]; enemy.y += enemy.speed; enemy.shootCooldown--; if (enemy.shootCooldown <= 0 && enemy.y > 10 && enemy.y < canvas.height * 0.65) { enemyShoot(enemy); enemy.shootCooldown = Math.max(25, 100 + Math.random() * 80 - level * 4); } if (enemy.y > canvas.height) { enemies.splice(i, 1); } } }
+            function checkCollisions() { for (let i = bullets.length - 1; i >= 0; i--) { if (!bullets[i]) continue; for (let j = enemies.length - 1; j >= 0; j--) { if (!enemies[j]) continue; if (isColliding(bullets[i], enemies[j])) { enemies.splice(j, 1); bullets.splice(i, 1); score += 100; updateScore(); playExplosionSound(); break; } } } if (player.invulnerable) { return; } for (let i = enemyBullets.length - 1; i >= 0; i--) { if (isColliding(enemyBullets[i], player)) { enemyBullets.splice(i, 1); handlePlayerHit(); return; } } for (let i = enemies.length - 1; i >= 0; i--) { if (!enemies[i]) continue; if (isColliding(enemies[i], player)) { enemies.splice(i, 1); playExplosionSound(); handlePlayerHit(); return; } } }
             function isColliding(rect1, rect2) { if (!rect1 || !rect2) return false; return rect1.x < rect2.x + rect2.width && rect1.x + rect1.width > rect2.x && rect1.y < rect2.y + rect2.height && rect1.y + rect1.height > rect2.y; }
             function updateScore() {
-                if (scoreDisplay) scoreDisplay.textContent = `Score ${score}`;
-                if (score >= lifespanIncreaseScore && lifespan < maxLifespan) {
-                    lifespan++;
-                    lifespanIncreaseScore += 50 + (lifespan - 50) * 10;
-                    if (levelDisplay) levelDisplay.textContent = `Lifespan ${lifespan}`;
-                    console.log(`Lifespan increased to ${lifespan}. Next at ${lifespanIncreaseScore} score.`);
-
-                    // Check for evolution
-                    if (lifespan >= evolutionLifespan && !isEvolved) {
+                if (scoreDisplay) scoreDisplay.textContent = `Score: ${score}`;
+                if (scoreDisplay && score >= levelUpScore) {
+                    level++;
+                    levelUpScore += (1000 + level * 100); // Original level up logic
+                    if (levelDisplay) levelDisplay.textContent = `lv ${level}`; // Changed "Level: " to "lv "
+                    if (level >= 5 && !isEvolved) {
                         isEvolved = true;
-                        console.log(`Player Evolved at Lifespan ${lifespan}!`);
-                        // Optional: Adjust player stats on evolution
-                        // player.shootDelay = 12; // Example: Faster shooting
+                        console.log("Player Evolved to Starmie!");
+                        // Optionally increase player size slightly or adjust other stats
+                        // player.width = 45; player.height = 45;
                     }
                 }
             }
-            function triggerGameOver() { gameOver = true; gameRunning = false; if (finalScoreDisplay) finalScoreDisplay.textContent = `Final Score ${score} | Max Lifespan ${lifespan}`; if (gameOverBox) gameOverBox.style.display = 'block'; if (pauseMenu) pauseMenu.style.display = 'none'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } }
+            function triggerGameOver() { gameOver = true; gameRunning = false; if (finalScoreDisplay) finalScoreDisplay.textContent = `Final Score: ${score}`; if (gameOverBox) gameOverBox.style.display = 'block'; if (pauseMenu) pauseMenu.style.display = 'none'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } }
             function handlePlayerHit() { if (player.invulnerable) return; lives--; updateLivesDisplay(); playPlayerHitSound(); if (lives <= 0) { triggerGameOver(); } else { player.invulnerable = true; player.invulnerableTimer = 120; const clearRadius = 75; for (let i = enemyBullets.length - 1; i >= 0; i--) { const bullet = enemyBullets[i]; const dx = (bullet.x + bullet.width / 2) - (player.x + player.width / 2); const dy = (bullet.y + bullet.height / 2) - (player.y + player.height / 2); if (Math.sqrt(dx * dx + dy * dy) < clearRadius) { enemyBullets.splice(i, 1); } } } }
             function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-            function updateEventStatus() {
-                if (!eventStatusDisplay) return;
-                if (isEventActive) {
-                    let eventName = currentEvent.replace('_', ' ').toUpperCase();
-                    let timeLeft = (eventTimer / 60).toFixed(1);
-                    eventStatusDisplay.textContent = `${eventName} (${timeLeft}s)`;
-                    // Make the event notification more obvious
-                    eventStatusDisplay.style.color = 'white';
-                    eventStatusDisplay.style.backgroundColor = '#ff0000';
-                    eventStatusDisplay.style.fontSize = '16px';
-                    eventStatusDisplay.style.fontWeight = 'bold';
-                    eventStatusDisplay.style.textShadow = '2px 2px 4px #000';
-                    eventStatusDisplay.style.padding = '4px 10px';
-                    eventStatusDisplay.style.marginTop = '2px';
-                    eventStatusDisplay.style.borderRadius = '5px';
-                } else {
-                    eventStatusDisplay.textContent = '';
-                    // Reset inline styles
-                    eventStatusDisplay.style.backgroundColor = '';
-                    eventStatusDisplay.style.fontSize = '';
-                    eventStatusDisplay.style.fontWeight = '';
-                    eventStatusDisplay.style.textShadow = '';
-                    eventStatusDisplay.style.padding = '';
-                    eventStatusDisplay.style.borderRadius = '';
-                    eventStatusDisplay.style.color = 'yellow';
-                }
-            }
 
             function gameLoop() {
                 if (gameRunning) {
-                    if (!isEventActive) {
-                        if (eventCooldownTimer > 0) {
-                            eventCooldownTimer--;
-                        } else {
-                            isEventActive = true;
-                            currentEvent = healthEvents[Math.floor(Math.random() * healthEvents.length)];
-                            eventTimer = eventDuration;
-                            console.log("Event started:", currentEvent);
-                        }
-                    } else {
-                        if (eventTimer > 0) {
-                            eventTimer--;
-                        } else {
-                            isEventActive = false;
-                            currentEvent = null;
-                            eventCooldownTimer = eventCooldown;
-                            console.log("Event ended");
-                        }
-                    }
-
-                    clearCanvas();
-                    updatePlayer();
-                    updateBullets();
-                    updateEnemies();
-                    checkCollisions();
-                    updateEventStatus();
-
-                    drawPlayer();
-                    drawBullets();
-                    drawEnemies();
-
+                    clearCanvas(); updatePlayer(); updateBullets(); updateEnemies(); checkCollisions();
+                    drawPlayer(); drawBullets(); drawEnemies();
                     animationFrameId = requestAnimationFrame(gameLoop);
                 }
             }
 
+            // --- Initial Setup for this instance ---
             updateScore(); updateLivesDisplay();
-            if (levelDisplay) levelDisplay.textContent = `Lifespan ${lifespan}`;
+            if (levelDisplay) levelDisplay.textContent = `lv ${level}`; // Changed "Level: " to "lv "
             updateSoundTogglesUI();
             gameRunning = true;
             if (gameOverBox) gameOverBox.style.display = 'none';
             if (pauseMenu) pauseMenu.style.display = 'none';
-            if (eventStatusDisplay) eventStatusDisplay.textContent = '';
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             animationFrameId = requestAnimationFrame(gameLoop);
 
-        }
+        } // --- End of initGame Function ---
 
+        // --- Global Functions ---
+        // No longer needed if restart reloads page
+        // function removeGameListeners() { /* ... */ }
+
+        // --- MODIFIED restartGame Function ---
         function restartGame() {
             console.log("Restart button clicked! Reloading page...");
+            // Simple page reload for a guaranteed clean restart
             window.location.reload();
         }
+        // --- END MODIFIED restartGame Function ---
 
+        // --- Assign the main initializer to window.onload ---
         window.onload = initGame;
 
     </script>
