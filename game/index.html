@@ -13,12 +13,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            /* Default alignment */
             min-height: 100vh;
             background-color: #1a1a2e;
             margin: 0;
             font-family: 'Press Start 2P', cursive;
             color: #e0e0e0;
             overflow: hidden;
+            padding-top: 0;
+            /* Default padding */
+            transition: align-items 0.3s ease, padding-top 0.3s ease;
+            /* Smooth transition */
+        }
+
+        /* Added rule for touch devices */
+        body.touch-enabled {
+            align-items: flex-start;
+            /* Align container to the top */
+            padding-top: 20px;
+            /* Add some space at the top */
         }
 
         #gameContainer {
@@ -51,7 +64,7 @@
             width: 100%;
             padding: 10px 15px;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 10px;
             color: #00ffcc;
             text-shadow: 0 0 5px #00ffcc;
         }
@@ -181,14 +194,15 @@
         }
 
         #controlsInfo {
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 10px;
             color: #aaa;
             text-align: center;
+            min-height: 45px;
         }
 
         #touchControls {
-            position: absolute;
+            position: fixed;
             bottom: 10px;
             left: 0;
             width: 100%;
@@ -266,7 +280,10 @@
             <div id="lives">❤️❤️❤️</div>
         </div>
         <canvas id="gameCanvas" width="450" height="600"></canvas>
-
+        <div id="controlsInfo">
+            <div id="eventStatus" style="font-size: 10px; color: yellow; height: 20px; margin-bottom: 5px;"></div>
+            <span id="controlInstructions">Arrow Keys (Move), Space (Shoot), Esc (Pause)</span>
+        </div>
         <div id="touchControls">
             <div id="joystickBase" class="touch-control">
                 <div id="joystickKnob"></div>
@@ -290,10 +307,6 @@
                 <button id="shootSoundToggle">Shoot FX: OFF</button>
                 <button id="enemyHitSoundToggle">Hit FX: ON</button>
             </div>
-        </div>
-        <div id="controlsInfo">
-            <span id="controlInstructions">Arrow Keys (Move), Space (Shoot), Esc (Pause)</span>
-            <div id="eventStatus" style="font-size: 10px; color: yellow; height: 12px; margin-top: 5px;"></div>
         </div>
     </div>
 
@@ -395,6 +408,7 @@
             let shootButtonPressed = false;
             let currentJoystickRadius = 0;
             let currentMaxJoystickDisplacement = 0;
+            let touchSensitivity = 0.8; // Added: Sensitivity factor for touch controls
 
             // --- Health Event Variables ---
             let isEventActive = false;
@@ -526,6 +540,7 @@
                 console.log("Touch device detected, enabling touch controls.");
                 if (touchControlsContainer) touchControlsContainer.style.display = 'block';
                 if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Move, Pause, Shoot';
+                document.body.classList.add('touch-enabled'); // Add class to body
 
                 joystickBase.addEventListener('touchstart', handleJoystickStartRef, { passive: false });
                 joystickBase.addEventListener('touchmove', handleJoystickMoveRef, { passive: false });
@@ -542,6 +557,7 @@
                 console.log("No touch support detected.");
                 if (touchControlsContainer) touchControlsContainer.style.display = 'none';
                 if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Arrow Keys (Move), Space (Shoot), Esc (Pause)';
+                document.body.classList.remove('touch-enabled'); // Ensure class is removed if not touch
                 if (gameContainer) gameContainer.style.minWidth = '520px';
                 if (gameContainer) gameContainer.style.minHeight = '720px';
             }
@@ -604,8 +620,8 @@
                     currentSpeed *= FEVER_PLAYER_SPEED_MULTIPLIER;
                 }
 
-                player.dx = normalizedX * currentSpeed;
-                player.dy = normalizedY * currentSpeed;
+                player.dx = normalizedX * currentSpeed * touchSensitivity; // Apply sensitivity
+                player.dy = normalizedY * currentSpeed * touchSensitivity; // Apply sensitivity
             }
             function updatePlayer() {
                 if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } }
