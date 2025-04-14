@@ -288,7 +288,7 @@
             </div>
             <div class="sound-toggle-container">
                 <button id="shootSoundToggle">Shoot FX: OFF</button>
-                <button id="hitSoundToggle">Hit FX: ON</button>
+                <button id="enemyHitSoundToggle">Hit FX: ON</button>
             </div>
         </div>
         <div id="controlsInfo">
@@ -304,7 +304,7 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreDisplay = document.getElementById('score');
-        const levelDisplay = document.getElementById('level');
+        const lifespanDisplay = document.getElementById('level');
         const livesDisplay = document.getElementById('lives');
         const gameOverBox = document.getElementById('gameOverBox');
         const finalScoreDisplay = document.getElementById('finalScore');
@@ -313,19 +313,20 @@
         const resumeButton = document.getElementById('resumeButton');
         const pauseRestartButton = document.getElementById('pauseRestartButton');
         const shootSoundToggleButton = document.getElementById('shootSoundToggle');
-        const hitSoundToggleButton = document.getElementById('hitSoundToggle');
+        const enemyHitSoundToggleButton = document.getElementById('enemyHitSoundToggle');
         const eventStatusDisplay = document.getElementById('eventStatus');
         const touchControlsContainer = document.getElementById('touchControls');
         const joystickBase = document.getElementById('joystickBase');
         const joystickKnob = document.getElementById('joystickKnob');
         const shootButton = document.getElementById('shootButton');
         const pauseButton = document.getElementById('pauseButton');
-        const controlInstructionsDisplay = document.getElementById('controlInstructions'); // Added reference
+        const controlInstructionsDisplay = document.getElementById('controlInstructions');
+        const gameContainer = document.getElementById('gameContainer');
 
         // --- Sound Setup (Global) ---
         let soundsReady = false;
-        let shootSoundEnabled = false; // Changed default to false
-        let explosionSoundEnabled = true;
+        let shootSoundEnabled = false;
+        let enemyHitSoundEnabled = true;
         let playerHitSoundEnabled = true;
 
         const synth = new Tone.Synth().toDestination();
@@ -333,8 +334,8 @@
         const noiseSynth = new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0 } }).toDestination();
 
         function playShootSound() { if (!shootSoundEnabled || !soundsReady) return; try { synth.triggerAttackRelease("E5", "16n"); } catch (e) { console.error("Shoot sound error:", e); } }
-        function playExplosionSound() { if (!explosionSoundEnabled || !soundsReady) return; try { metalSynth.triggerAttackRelease("8n"); } catch (e) { console.error("Explosion sound error:", e); } }
-        function playPlayerHitSound() { if (!explosionSoundEnabled || !soundsReady) return; try { noiseSynth.triggerAttackRelease("8n"); } catch (e) { console.error("Player hit sound error:", e); } }
+        function playEnemyHitSound() { if (!enemyHitSoundEnabled || !soundsReady) return; try { metalSynth.triggerAttackRelease("8n"); } catch (e) { console.error("Enemy hit sound error:", e); } }
+        function playPlayerHitSound() { if (!playerHitSoundEnabled || !soundsReady) return; try { noiseSynth.triggerAttackRelease("8n"); } catch (e) { console.error("Player hit sound error:", e); } }
 
         function initializeAudio() { if (Tone.context.state !== 'running') { Tone.start().then(() => { soundsReady = true; }).catch(e => { console.error("Failed to start AudioContext:", e); }); } else { soundsReady = true; } }
         document.body.addEventListener('click', initializeAudio, { once: true });
@@ -356,10 +357,10 @@
         // --- Named Event Handlers References (needed for removal) ---
         let handleKeyDownRef; let handleKeyUpRef; let handleRestartClickRef;
         let handleResumeClickRef; let handlePauseRestartClickRef;
-        let handleShootToggleRef; let handleHitToggleRef;
+        let handleShootToggleRef; let handleEnemyHitSoundToggleRef;
         let handleJoystickStartRef, handleJoystickMoveRef, handleJoystickEndRef;
         let handleShootButtonStartRef, handleShootButtonEndRef;
-        let handlePauseButtonTapRef; // Added reference
+        let handlePauseButtonTapRef;
 
         // --- Touch Detection ---
         function isTouchDevice() {
@@ -372,18 +373,18 @@
 
             // --- Game State Variables (Re-initialized) ---
             let score = 0;
-            let lifespan = 50; // Changed from level, starts at 50
-            const maxLifespan = 200; // Max lifespan
+            let lifespan = 50;
+            const maxLifespan = 200;
             let lives = 3;
             let gameOver = false;
             let isPaused = false;
             let gameRunning = true;
             let enemySpawnTimer = 0;
-            let baseEnemySpawnRate = 120; // Slightly increased initial spawn rate
-            let lifespanIncreaseScore = 500; // Score needed for +1 lifespan initially
+            let baseEnemySpawnInterval = 120;
+            let lifespanIncreaseScore = 500;
             const keys = {};
-            let isEvolved = false; // Player evolution state
-            const evolutionLifespan = 70; // Lifespan level for evolution
+            let isEvolved = false;
+            const evolutionLifespan = 70;
 
             // --- Touch Control State ---
             let touchDevice = isTouchDevice();
@@ -392,31 +393,38 @@
             let joystickStartX = 0;
             let joystickStartY = 0;
             let shootButtonPressed = false;
-            let currentJoystickRadius = 0; // Will be set in handler
-            let currentMaxJoystickDisplacement = 0; // Will be set in handler
+            let currentJoystickRadius = 0;
+            let currentMaxJoystickDisplacement = 0;
 
             // --- Health Event Variables ---
             let isEventActive = false;
-            let currentEvent = null; // 'heart_attack', 'cancer', 'depression'
+            let currentEvent = null;
             let eventTimer = 0;
-            const eventDuration = 600; // 5 seconds at 60fps
-            let eventCooldownTimer = 600; // 10 seconds initial cooldown before first event
-            const eventCooldown = 1200; // 20 seconds between events
-            const healthEvents = ['heart_attack', 'cancer', 'depression'];
-            const depressionMoveFactor = 0.4; // Multiplies player speed
-            const depressionShootFactor = 3; // Multiplies shoot delay
-            const cancerEnemyHealth = 5; // Hits needed for cancer enemies
-            const cancerEnemySizeFactor = 2; // Size multiplier for cancer enemies
-            const heartAttackIntensity = 10; // Max pixel shift for heart attack tremble
-            const eventScoreMultiplier = 2; // Score multiplier during events
+            const EVENT_DURATION = 600;
+            const EVENT_DURATION_INCREASE_PER_LIFESPAN_SEC = 0.1;
+            const EVENT_DURATION_INCREASE_PER_LIFESPAN_FRAMES = EVENT_DURATION_INCREASE_PER_LIFESPAN_SEC * 60;
+            let eventCooldownTimer = 600;
+            const EVENT_COOLDOWN = 1200;
+            const healthEvents = ['heart_attack', 'cancer', 'depression', 'fever'];
+            const DEPRESSION_MOVE_FACTOR = 0.4;
+            const DEPRESSION_SHOOT_FACTOR = 3;
+            const CANCER_ENEMY_HEALTH = 5;
+            const CANCER_ENEMY_SIZE_FACTOR = 2;
+            const HEART_ATTACK_INTENSITY = 20;
+            const HEART_ATTACK_SHOOT_COOLDOWN_MULTIPLIER = 2;
+            const EVENT_SCORE_MULTIPLIER = 2;
+            const FEVER_SPAWN_INTERVAL_MULTIPLIER = 0.5;
+            const FEVER_BULLET_SPEED_MULTIPLIER = 2;
+            const FEVER_PLAYER_SPEED_MULTIPLIER = 1.5;
+            const FEVER_SHOOT_COOLDOWN_MULTIPLIER = 0.5;
+            const MIN_ENEMY_SHOOT_COOLDOWN = 15;
 
             // --- Game Element Objects (Re-initialized) ---
-            const player = { x: canvas.width / 2 - 20, y: canvas.height - 60, width: 35, height: 35, speed: 4, dx: 0, dy: 0, shootCooldown: 0, shootDelay: 18, fallbackColor: '#FF6B6B', invulnerable: false, invulnerableTimer: 0 }; // Adjusted size/speed/delay
+            const player = { x: canvas.width / 2 - 20, y: canvas.height - 60, width: 35, height: 35, speed: 4, dx: 0, dy: 0, shootCooldown: 0, shootCooldownDuration: 18, fallbackColor: '#FF6B6B', invulnerable: false, invulnerableTimer: 0 };
             const bullets = [];
             const enemies = [];
             const enemyBullets = [];
-            // Changed enemy emojis to health factors
-            const enemyEmojis = ['🍔', '🚬', '🍺', '🦠', '🤯', '🛋️', '💊', '💉', '💼', '📱', '🥤', '😴', '🏭', '💸', '💔']; // Burger, Smoke, Beer, Virus, Stress, Sedentary, Pill, Syringe, Work, ScreenTime, Soda, Lack Sleep, Pollution, Financial Stress, Loneliness
+            const enemyEmojis = ['🍔', '🚬', '🍺', '🦠', '🤯', '🛋️', '💊', '💉', '💼', '📱', '🥤', '😴', '🏭', '💸', '💔'];
 
             // --- Define Event Handlers ---
             handleKeyDownRef = function handleKeyDown(e) {
@@ -428,19 +436,18 @@
             handlePauseRestartClickRef = restartGame;
             handleResumeClickRef = function handleResumeClick() { resumeGame(); };
             handleShootToggleRef = function handleShootToggle() { shootSoundEnabled = !shootSoundEnabled; updateSoundTogglesUI(); };
-            handleHitToggleRef = function handleHitToggle() { explosionSoundEnabled = !explosionSoundEnabled; updateSoundTogglesUI(); };
+            handleEnemyHitSoundToggleRef = function handleEnemyHitSoundToggle() { enemyHitSoundEnabled = !enemyHitSoundEnabled; updateSoundTogglesUI(); };
 
             // --- Touch Event Handlers ---
             handleJoystickStartRef = function handleJoystickStart(e) {
                 e.preventDefault();
-                if (joystickActive) return; // Only track one touch
+                if (joystickActive) return;
 
-                // Calculate dimensions *here* when touch starts
                 currentJoystickRadius = joystickBase.offsetWidth / 2;
                 const currentKnobRadius = joystickKnob.offsetWidth / 2;
                 currentMaxJoystickDisplacement = currentJoystickRadius - currentKnobRadius;
 
-                if (currentJoystickRadius <= 0) { // Safety check if dimensions aren't ready
+                if (currentJoystickRadius <= 0) {
                     console.error("Joystick dimensions not ready.");
                     return;
                 }
@@ -449,11 +456,10 @@
                 joystickTouchId = touch.identifier;
                 joystickActive = true;
                 const rect = joystickBase.getBoundingClientRect();
-                // Calculate center based on current position and radius
                 joystickStartX = rect.left + currentJoystickRadius;
                 joystickStartY = rect.top + currentJoystickRadius;
                 joystickBase.classList.add('active');
-                updateJoystick(touch.clientX, touch.clientY); // Initial update using current touch position
+                updateJoystick(touch.clientX, touch.clientY);
             };
 
             handleJoystickMoveRef = function handleJoystickMove(e) {
@@ -471,9 +477,9 @@
                 if (touch) {
                     joystickActive = false;
                     joystickTouchId = null;
-                    player.dx = 0; // Stop player movement
+                    player.dx = 0;
                     player.dy = 0;
-                    joystickKnob.style.transform = `translate(0px, 0px)`; // Reset knob position
+                    joystickKnob.style.transform = `translate(0px, 0px)`;
                     joystickBase.classList.remove('active');
                 }
             };
@@ -503,7 +509,7 @@
             };
 
             handlePauseButtonTapRef = function handlePauseButtonTap(e) {
-                e.preventDefault(); // Prevent potential double actions
+                e.preventDefault();
                 togglePause();
             };
 
@@ -514,13 +520,12 @@
             if (resumeButton) resumeButton.addEventListener('click', handleResumeClickRef);
             if (pauseRestartButton) pauseRestartButton.addEventListener('click', handlePauseRestartClickRef);
             if (shootSoundToggleButton) shootSoundToggleButton.addEventListener('click', handleShootToggleRef);
-            if (hitSoundToggleButton) hitSoundToggleButton.addEventListener('click', handleHitToggleRef);
+            if (enemyHitSoundToggleButton) enemyHitSoundToggleButton.addEventListener('click', handleEnemyHitSoundToggleRef);
 
-            // --- Add Touch Listeners if applicable ---
             if (touchDevice) {
                 console.log("Touch device detected, enabling touch controls.");
                 if (touchControlsContainer) touchControlsContainer.style.display = 'block';
-                if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Move, Pause, Shoot'; // Update controls text
+                if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Move, Pause, Shoot';
 
                 joystickBase.addEventListener('touchstart', handleJoystickStartRef, { passive: false });
                 joystickBase.addEventListener('touchmove', handleJoystickMoveRef, { passive: false });
@@ -531,19 +536,20 @@
                 shootButton.addEventListener('touchend', handleShootButtonEndRef, { passive: false });
                 shootButton.addEventListener('touchcancel', handleShootButtonEndRef, { passive: false });
 
-                // Add listener for the pause button
                 if (pauseButton) pauseButton.addEventListener('touchstart', handlePauseButtonTapRef, { passive: false });
 
             } else {
                 console.log("No touch support detected.");
                 if (touchControlsContainer) touchControlsContainer.style.display = 'none';
-                if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Arrow Keys (Move), Space (Shoot), Esc (Pause)'; // Default controls text
+                if (controlInstructionsDisplay) controlInstructionsDisplay.textContent = 'Arrow Keys (Move), Space (Shoot), Esc (Pause)';
+                if (gameContainer) gameContainer.style.minWidth = '520px';
+                if (gameContainer) gameContainer.style.minHeight = '720px';
             }
 
             // --- Game Logic Functions (Defined within initGame scope) ---
             function updateSoundTogglesUI() {
                 if (shootSoundToggleButton) { shootSoundToggleButton.textContent = `Shoot FX: ${shootSoundEnabled ? 'ON' : 'OFF'}`; shootSoundToggleButton.classList.toggle('sound-toggle-on', shootSoundEnabled); shootSoundToggleButton.classList.toggle('sound-toggle-off', !shootSoundEnabled); }
-                if (hitSoundToggleButton) { hitSoundToggleButton.textContent = `Hit FX: ${explosionSoundEnabled ? 'ON' : 'OFF'}`; hitSoundToggleButton.classList.toggle('sound-toggle-on', explosionSoundEnabled); hitSoundToggleButton.classList.toggle('sound-toggle-off', !explosionSoundEnabled); }
+                if (enemyHitSoundToggleButton) { enemyHitSoundToggleButton.textContent = `Hit FX: ${enemyHitSoundEnabled ? 'ON' : 'OFF'}`; enemyHitSoundToggleButton.classList.toggle('sound-toggle-on', enemyHitSoundEnabled); enemyHitSoundToggleButton.classList.toggle('sound-toggle-off', !enemyHitSoundEnabled); }
             }
             function updateLivesDisplay() { if (livesDisplay) { const heartEmoji = '❤️'; const displayLives = Math.max(0, lives); livesDisplay.textContent = heartEmoji.repeat(displayLives); } }
             function togglePause() { if (gameOver) return; isPaused = !isPaused; if (isPaused) { gameRunning = false; updateSoundTogglesUI(); if (pauseMenu) pauseMenu.style.display = 'block'; if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } } else { resumeGame(); } }
@@ -592,7 +598,10 @@
 
                 let currentSpeed = player.speed;
                 if (isEventActive && currentEvent === 'depression') {
-                    currentSpeed *= depressionMoveFactor;
+                    currentSpeed *= DEPRESSION_MOVE_FACTOR;
+                }
+                if (isEventActive && currentEvent === 'fever') {
+                    currentSpeed *= FEVER_PLAYER_SPEED_MULTIPLIER;
                 }
 
                 player.dx = normalizedX * currentSpeed;
@@ -602,11 +611,18 @@
                 if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } }
 
                 let currentSpeed = player.speed;
-                let currentShootDelay = player.shootDelay;
+                let currentShootCooldown = player.shootCooldownDuration;
 
                 if (isEventActive && currentEvent === 'depression') {
-                    currentSpeed *= depressionMoveFactor;
-                    currentShootDelay *= depressionShootFactor;
+                    currentSpeed *= DEPRESSION_MOVE_FACTOR;
+                    currentShootCooldown *= DEPRESSION_SHOOT_FACTOR;
+                }
+                if (isEventActive && currentEvent === 'fever') {
+                    currentSpeed *= FEVER_PLAYER_SPEED_MULTIPLIER;
+                    currentShootCooldown *= FEVER_SHOOT_COOLDOWN_MULTIPLIER;
+                }
+                if (isEventActive && currentEvent === 'heart_attack') {
+                    currentShootCooldown *= HEART_ATTACK_SHOOT_COOLDOWN_MULTIPLIER;
                 }
 
                 if (!joystickActive) {
@@ -622,7 +638,7 @@
 
                 if (isEventActive && currentEvent === 'heart_attack') {
                     if (eventTimer % 5 < 2) {
-                        player.x += (Math.random() - 0.5) * heartAttackIntensity;
+                        player.x += (Math.random() - 0.5) * HEART_ATTACK_INTENSITY;
                     }
                 }
 
@@ -632,7 +648,7 @@
                 if (player.shootCooldown > 0) player.shootCooldown--;
                 if ((keys['Space'] || shootButtonPressed) && player.shootCooldown === 0 && !player.invulnerable) {
                     shoot();
-                    player.shootCooldown = currentShootDelay;
+                    player.shootCooldown = Math.max(1, Math.round(currentShootCooldown));
                 }
             }
             function shoot() {
@@ -655,7 +671,13 @@
             function enemyShoot(enemy) {
                 const difficultyLevel = Math.floor((lifespan - 50) / 10) + 1;
                 const bulletWidth = 6; const bulletHeight = 6;
-                const bullet = { x: enemy.x + enemy.width / 2 - bulletWidth / 2, y: enemy.y + enemy.height, width: bulletWidth, height: bulletHeight, speed: 3 + difficultyLevel * 0.2 };
+                let bulletSpeed = 3 + difficultyLevel * 0.2;
+
+                if (isEventActive && currentEvent === 'fever') {
+                    bulletSpeed *= FEVER_BULLET_SPEED_MULTIPLIER;
+                }
+
+                const bullet = { x: enemy.x + enemy.width / 2 - bulletWidth / 2, y: enemy.y + enemy.height, width: bulletWidth, height: bulletHeight, speed: bulletSpeed };
                 enemyBullets.push(bullet);
             }
             function updateBullets() { for (let i = bullets.length - 1; i >= 0; i--) { bullets[i].y -= bullets[i].speed; if (bullets[i].y + bullets[i].height < 0) { bullets.splice(i, 1); } } for (let i = enemyBullets.length - 1; i >= 0; i--) { enemyBullets[i].y += enemyBullets[i].speed; if (enemyBullets[i].y > canvas.height) { enemyBullets.splice(i, 1); } } }
@@ -666,8 +688,8 @@
                 const randomEmoji = enemyEmojis[Math.floor(Math.random() * enemyEmojis.length)];
 
                 if (isEventActive && currentEvent === 'cancer') {
-                    enemySize *= cancerEnemySizeFactor;
-                    enemyHealth = cancerEnemyHealth;
+                    enemySize *= CANCER_ENEMY_SIZE_FACTOR;
+                    enemyHealth = CANCER_ENEMY_HEALTH;
                 }
 
                 const enemy = {
@@ -684,19 +706,30 @@
             }
             function updateEnemies() {
                 const difficultyLevel = Math.floor((lifespan - 50) / 10) + 1;
-                const currentSpawnRate = Math.max(20, baseEnemySpawnRate - difficultyLevel * 5);
+                let currentSpawnInterval = Math.max(20, baseEnemySpawnInterval - difficultyLevel * 5);
+
+                if (isEventActive && currentEvent === 'fever') {
+                    currentSpawnInterval *= FEVER_SPAWN_INTERVAL_MULTIPLIER;
+                    currentSpawnInterval = Math.max(10, currentSpawnInterval);
+                }
+
                 enemySpawnTimer++;
-                if (enemySpawnTimer >= currentSpawnRate) {
+                if (enemySpawnTimer >= currentSpawnInterval) {
                     spawnEnemy();
                     enemySpawnTimer = 0;
                 }
+
                 for (let i = enemies.length - 1; i >= 0; i--) {
                     const enemy = enemies[i];
                     enemy.y += enemy.speed;
                     enemy.shootCooldown--;
                     if (enemy.shootCooldown <= 0 && enemy.y > 10 && enemy.y < canvas.height * 0.65) {
                         enemyShoot(enemy);
-                        enemy.shootCooldown = Math.max(30, 120 + Math.random() * 100 - difficultyLevel * 5);
+                        let newCooldown = 120 + Math.random() * 100 - difficultyLevel * 5;
+                        if (isEventActive && currentEvent === 'fever') {
+                            newCooldown *= FEVER_SHOOT_COOLDOWN_MULTIPLIER;
+                        }
+                        enemy.shootCooldown = Math.max(MIN_ENEMY_SHOOT_COOLDOWN, newCooldown);
                     }
                     if (enemy.y > canvas.height) {
                         enemies.splice(i, 1);
@@ -713,10 +746,10 @@
                             bullets.splice(i, 1);
                             if (enemies[j].health <= 0) {
                                 let enemyScore = 100;
-                                if (isEventActive) { enemyScore *= eventScoreMultiplier; }
+                                if (isEventActive) { enemyScore *= EVENT_SCORE_MULTIPLIER; }
                                 score += enemyScore;
                                 updateScore();
-                                playExplosionSound();
+                                playEnemyHitSound();
                                 enemies.splice(j, 1);
                             }
                             break;
@@ -738,7 +771,7 @@
                         enemies[i].health -= 2;
                         if (enemies[i].health <= 0) {
                             enemies.splice(i, 1);
-                            playExplosionSound();
+                            playEnemyHitSound();
                         }
                         return;
                     }
@@ -750,7 +783,7 @@
                 if (score >= lifespanIncreaseScore && lifespan < maxLifespan) {
                     lifespan++;
                     lifespanIncreaseScore += 50 + (lifespan - 50) * 10;
-                    if (levelDisplay) levelDisplay.textContent = `Lifespan ${lifespan}`;
+                    if (lifespanDisplay) lifespanDisplay.textContent = `Lifespan ${lifespan}`;
                     console.log(`Lifespan increased to ${lifespan}. Next at ${lifespanIncreaseScore} score.`);
 
                     if (lifespan >= evolutionLifespan && !isEvolved) {
@@ -774,7 +807,6 @@
                     eventStatusDisplay.style.fontWeight = 'bold';
                     eventStatusDisplay.style.textShadow = '2px 2px 4px #000';
                     eventStatusDisplay.style.padding = '4px 10px';
-                    eventStatusDisplay.style.marginTop = '2px';
                     eventStatusDisplay.style.borderRadius = '5px';
                 } else {
                     eventStatusDisplay.textContent = '';
@@ -796,8 +828,10 @@
                         } else {
                             isEventActive = true;
                             currentEvent = healthEvents[Math.floor(Math.random() * healthEvents.length)];
-                            eventTimer = eventDuration;
-                            console.log("Event started:", currentEvent);
+                            const lifespanDifference = Math.max(0, lifespan - 50);
+                            const extraDurationFrames = lifespanDifference * EVENT_DURATION_INCREASE_PER_LIFESPAN_FRAMES;
+                            eventTimer = EVENT_DURATION + extraDurationFrames;
+                            console.log(`Event started: ${currentEvent}, Duration: ${(eventTimer / 60).toFixed(1)}s (Base: ${EVENT_DURATION / 60}s, Extra: ${extraDurationFrames / 60}s)`);
                         }
                     } else {
                         if (eventTimer > 0) {
@@ -805,7 +839,7 @@
                         } else {
                             isEventActive = false;
                             currentEvent = null;
-                            eventCooldownTimer = eventCooldown;
+                            eventCooldownTimer = EVENT_COOLDOWN;
                             console.log("Event ended");
                         }
                     }
@@ -826,7 +860,7 @@
             }
 
             updateScore(); updateLivesDisplay();
-            if (levelDisplay) levelDisplay.textContent = `Lifespan ${lifespan}`;
+            if (lifespanDisplay) lifespanDisplay.textContent = `Lifespan ${lifespan}`;
             updateSoundTogglesUI();
             gameRunning = true;
             if (gameOverBox) gameOverBox.style.display = 'none';
