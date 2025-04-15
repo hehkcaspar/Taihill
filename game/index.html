@@ -256,14 +256,14 @@
             transform: translateX(-50%);
             width: 50px;
             height: 50px;
-            background-color: rgba(128, 128, 128, 0.3);
+            background-color: rgba(128, 128, 128, 0.2);
             border-radius: 50%;
             pointer-events: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 20px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(200, 200, 200, 0.3);
             cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
@@ -408,7 +408,8 @@
             let shootButtonPressed = false;
             let currentJoystickRadius = 0;
             let currentMaxJoystickDisplacement = 0;
-            let touchSensitivity = 0.8; // Added: Sensitivity factor for touch controls
+            let touchSensitivityX = 0.8;
+            let touchSensitivityY = 0.7;
 
             // --- Health Event Variables ---
             let isEventActive = false;
@@ -620,8 +621,8 @@
                     currentSpeed *= FEVER_PLAYER_SPEED_MULTIPLIER;
                 }
 
-                player.dx = normalizedX * currentSpeed * touchSensitivity; // Apply sensitivity
-                player.dy = normalizedY * currentSpeed * touchSensitivity; // Apply sensitivity
+                player.dx = normalizedX * currentSpeed * touchSensitivityX;
+                player.dy = normalizedY * currentSpeed * touchSensitivityY;
             }
             function updatePlayer() {
                 if (player.invulnerable) { player.invulnerableTimer--; if (player.invulnerableTimer <= 0) { player.invulnerable = false; } }
