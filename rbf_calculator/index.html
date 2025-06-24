@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Revenue‑Based Financing Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 p-6">
+  <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 space-y-6">
+    <h1 class="text-3xl font-bold mb-4 text-indigo-700">RBF Cash‑Flow Calculator</h1>
+
+    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+      <label for="presetSelect" class="block text-sm font-medium text-indigo-800">Typical RBF Provider Setup</label>
+      <select id="presetSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white border-indigo-200 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm">
+        <option value="">Select a preset...</option>
+      </select>
+    </div>
+    <div id="presetDescription" class="text-sm text-gray-600 mt-1 p-2 bg-gray-50 rounded hidden"></div>
+    <div class="space-y-6">
+      <form id="calcForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block font-medium mb-1" title="Choose between a fixed monthly installment or a revenue-share deal.">Deal Type</label>
+          <select id="dealType" class="w-full rounded-lg border p-2">
+            <option value="fixed">Fixed Monthly Installment</option>
+            <option value="revshare">Revenue‑Share</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1" title="Your company's current Monthly Recurring Revenue.">Current MRR ($)</label>
+          <input type="number" id="mrr" class="w-full rounded-lg border p-2" value="100000" min="0" step="0.01" />
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1" title="Projected monthly growth rate for MRR.">Monthly MRR Growth (%)</label>
+          <input type="number" id="growthPct" class="w-full rounded-lg border p-2" value="5" step="0.01" />
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1" title="The total nominal amount of capital you are borrowing.">Nominal Borrow Amount ($)</label>
+          <input type="number" id="borrowAmt" class="w-full rounded-lg border p-2" value="100000" min="0" step="0.01" />
+        </div>
+
+        <div data-field="fixed revshare" id="termContainer">
+          <label class="block font-medium mb-1" title="The duration of the financing agreement in months.">Term (months)</label>
+          <input type="number" id="termMonths" class="w-full rounded-lg border p-2" value="12" min="1" />
+        </div>
+
+        <div data-field="fixed">
+          <label class="block font-medium mb-1" title="An upfront fee deducted from the borrowed amount. e.g. You borrow 100, but get 90.">Discount-off-wire</label>
+          <div class="flex gap-2">
+            <input type="number" id="discountPct" class="flex-1 rounded-l-lg border p-2" value="0" min="0" step="0.01" />
+            <select id="discountType" class="rounded-r-lg border p-2 bg-white">
+              <option value="percent">%</option>
+              <option value="dollar">$</option>
+            </select>
+          </div>
+        </div>
+        <div data-field="fixed">
+          <label class="block font-medium mb-1" title="An additional fee added on top of the principal to be repaid. E.g., you borrow 100, but pay 110.">Flat fee on-top</label>
+          <div class="flex gap-2">
+            <input type="number" id="flatFee" class="flex-1 rounded-l-lg border p-2" value="0" min="0" step="0.01" />
+            <select id="flatFeeType" class="rounded-r-lg border p-2 bg-white">
+              <option value="percent">%</option>
+              <option value="dollar">$</option>
+            </select>
+          </div>
+        </div>
+
+        <div data-field="revshare">
+          <label class="block font-medium mb-1" title="The percentage of your monthly revenue that will be collected by the lender.">Rev‑Share %</label>
+          <input type="number" id="revSharePct" class="w-full rounded-lg border p-2" value="5" min="0" step="0.01" />
+        </div>
+
+        <div data-field="revshare">
+          <label class="block font-medium mb-1" title="The multiple of the nominal borrowed amount that represents the maximum repayment. Enter 1 if no cap applies.">Cap Multiple</label>
+          <input type="number" id="capMultiple" class="w-full rounded-lg border p-2" value="1.1" step="0.01" />
+        </div>
+
+        <div data-field="revshare">
+          <label class="block font-medium mb-1" title="A fixed monthly fee charged by the lender while loan is active. Not calculated into principal repayment.">Monthly Fee/Interest</label>
+          <div class="flex gap-2">
+            <input type="number" id="monthlyFee" class="flex-1 rounded-l-lg border p-2" value="0" min="0" step="0.01" />
+            <select id="monthlyFeeType" class="rounded-r-lg border p-2 bg-white">
+              <option value="percent">%</option>
+              <option value="dollar">$</option>
+            </select>
+          </div>
+        </div>
+
+        <div data-field="revshare">
+          <label class="block font-medium mb-1" title="An upfront fee deducted from the borrowed amount. e.g. You borrow 100, but get 90.">Discount-off-wire</label>
+          <div class="flex gap-2">
+            <input type="number" id="upfrontFee" class="flex-1 rounded-l-lg border p-2" value="0" step="0.01" />
+            <select id="upfrontFeeType" class="rounded-r-lg border p-2 bg-white">
+              <option value="dollar">$</option>
+              <option value="percent">%</option>
+            </select>
+          </div>
+        </div>
+
+        <div data-field="fixed revshare">
+          <label class="block font-medium mb-1" title="The number of months before repayments begin.">Grace Months</label>
+          <input type="number" id="graceMonths" class="w-full rounded-lg border p-2" value="0" min="0" />
+        </div>
+
+        <div class="md:col-span-2 mt-4 flex justify-center">
+          <button type="button" id="runBtn" class="w-full md:w-auto px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">Run</button>
+        </div>
+      </form>
+
+      <div id="output" class="hidden space-y-6">
+        <h2 class="text-2xl font-semibold text-emerald-700">Results</h2>
+        <div id="summary" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        <div>
+          <h3 class="font-semibold mb-2">Cash‑Flow Schedule</h3>
+          <div class="overflow-x-auto">
+            <table id="cashTable" class="min-w-full text-sm text-left"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// Form elements
+const dealType = document.getElementById('dealType');
+const mrr = document.getElementById('mrr');
+const growthPct = document.getElementById('growthPct');
+const borrowAmt = document.getElementById('borrowAmt');
+const termMonths = document.getElementById('termMonths');
+const discountPct = document.getElementById('discountPct');
+const discountType = document.getElementById('discountType');
+const flatFee = document.getElementById('flatFee');
+const flatFeeType = document.getElementById('flatFeeType');
+const revSharePct = document.getElementById('revSharePct');
+const capMultiple = document.getElementById('capMultiple');
+const upfrontFee = document.getElementById('upfrontFee');
+const upfrontFeeType = document.getElementById('upfrontFeeType');
+const graceMonths = document.getElementById('graceMonths');
+const runBtn = document.getElementById('runBtn');
+const output = document.getElementById('output');
+const summary = document.getElementById('summary');
+const cashTable = document.getElementById('cashTable');
+const termContainer = document.getElementById('termContainer');
+const presetSelect = document.getElementById('presetSelect');
+
+const toCurrency=v=>v.toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2});
+const irr=(c,g=0.1)=>{let r=g;for(let i=0;i<100;i++){let npv=0,d=0;for(let t=0;t<c.length;t++){npv+=c[t]/(1+r)**t;d-=t*c[t]/(1+r)**(t+1);}const nr=r-npv/d;if(Math.abs(nr-r)<1e-7)return nr;r=nr;}return r;};
+/* ---------- Deal‑specific calculators ---------- */
+function calcFixedInstallmentSeries(p) {
+  // Calculate proceeds after upfront discount
+  let proceeds = p.borrowAmt;
+  const discount = parseFloat(document.getElementById('discountPct').value) || 0;
+  const isDiscountPct = document.getElementById('discountType').value === 'percent';
+  if (isDiscountPct) {
+    proceeds *= (1 - discount / 100);
+  } else {
+    proceeds = Math.max(0, proceeds - discount);
+  }
+
+  // Calculate target repayment after cap/flat fee
+  let target = p.borrowAmt;
+  const flatFee = parseFloat(document.getElementById('flatFee').value) || 0;
+  const isFlatFeePct = document.getElementById('flatFeeType').value === 'percent';
+  if (isFlatFeePct) {
+    target = p.borrowAmt * (1 + flatFee / 100);
+  } else {
+    target = p.borrowAmt + flatFee;
+  }
+
+  return buildSeries({
+    ...p,
+    proceeds,
+    target,
+    isRevshare: false,
+    graceMonths: p.graceMonths || 0,
+    termMonths: p.termMonths
+  });
+} // handles fixed monthly installment calculations
+function calcFlatSeries(p) {
+  // Calculate target amount based on flat fee type
+  let target = p.borrowAmt;
+  const flatFee = parseFloat(document.getElementById('flatFee').value) || 0;
+  const isPercentage = document.getElementById('flatFeeType').value === 'percent';
+  
+  if (isPercentage) {
+    target = p.borrowAmt * (1 + flatFee / 100);
+  } else {
+    target = p.borrowAmt + flatFee;
+  }
+  
+  // Proceeds is the full borrow amount for flat fee loans
+  const proceeds = p.borrowAmt;
+  
+  return buildSeries({
+    ...p,
+    proceeds,
+    target
+  });
+}
+function calcRevshareSeries(p) {
+  // Calculate net proceeds after upfront fee/discount
+  let proceeds = p.borrowAmt;
+  const upfrontFee = parseFloat(document.getElementById('upfrontFee').value) || 0;
+  const isPercentage = document.getElementById('upfrontFeeType').value === 'percent';
+  
+  if (isPercentage) {
+    proceeds *= (1 - upfrontFee / 100);
+  } else {
+    proceeds -= upfrontFee;
+  }
+  
+  // Calculate target amount based on cap multiple
+  const target = p.capMultiple > 0 ? p.borrowAmt * p.capMultiple : Infinity;
+  
+  return buildSeries({
+    ...p,
+    proceeds,
+    target,
+    isRevshare: true
+  });
+}
+/* ---------- Shared series builder ---------- */
+function buildSeries(opts) {
+  const {
+    proceeds,
+    target,
+    termMonths,
+    graceMonths,
+    isRevshare = false,
+    mrr,
+    growthPct,
+    revSharePct,
+    monthlyFee,
+    monthlyFeeType,
+    borrowAmt
+  } = opts;
+  
+  const cf = [proceeds];
+  const mrrArr = [mrr];
+  const principalBalances = [target]; // Track principal balance
+  let bal = target;
+  let cur = mrr;
+  let month = 0;
+  const max = 240;
+  
+  while (bal > 0.01 && month < max) {
+    month++;
+    
+    // Apply growth to current MRR (starts from month 1)
+    if (month > 0) {
+      cur *= (1 + growthPct / 100);
+    }
+    
+    mrrArr.push(cur);
+    let principalPayment = 0;
+    let additionalFee = 0;
+    
+    // Calculate payment if past grace period
+    if (month > graceMonths) {
+      if (isRevshare) {
+        principalPayment = Math.min(cur * revSharePct / 100, bal);
+      } else {
+        const rem = Math.max(1, (termMonths || 1) - month + 1);
+        principalPayment = bal / rem;
+      }
+
+      // Calculate the additional monthly revenue share fee
+      if (monthlyFeeType === 'percent') {
+        additionalFee = (monthlyFee / 100) * borrowAmt;
+      } else { // 'dollar'
+        additionalFee = monthlyFee;
+      }
+
+      bal -= principalPayment; // Only principal payment reduces the balance
+    }
+    
+    principalBalances.push(bal); // Store the principal balance for this month
+    const totalPayment = principalPayment + additionalFee; // Total cash outflow
+    cf.push(-totalPayment);
+    
+    // Stop if we've reached the term for non-revshare loans
+    if (!isRevshare && month >= termMonths) break;
+  }
+  
+  // Handle any remaining balance
+  if (bal > 0.01) {
+    cf[cf.length - 1] -= bal;
+  }
+  
+  return { cf, mrrArr, principalBalances };
+}
+/* ---------- UI Helpers ---------- */
+function toggleFields() {
+  const dealTypeValue = dealType.value;
+  // Hide all fields
+  document.querySelectorAll('[data-field]').forEach(el => {
+    el.classList.add('hidden');
+  });
+  
+  // Show fields for selected type
+  if (dealTypeValue === 'fixed') {
+    // Show fixed fields and shared fields
+    document.querySelectorAll('[data-field~="fixed"]').forEach(el => el.classList.remove('hidden'));
+    document.querySelectorAll('[data-field~="flat discount revshare"]').forEach(el => el.classList.remove('hidden'));
+    termContainer.classList.remove('hidden');
+  } else if (dealTypeValue === 'revshare') {
+    // Show revshare fields and shared fields
+    document.querySelectorAll('[data-field~="revshare"]').forEach(el => el.classList.remove('hidden'));
+    document.querySelectorAll('[data-field~="flat discount revshare"]').forEach(el => el.classList.remove('hidden'));
+    termContainer.classList.add('hidden');
+  }
+}
+toggleFields();dealType.addEventListener('change',toggleFields);
+/* ---------- Preset Loading ---------- */
+function applyPreset(preset) {
+  if (!preset) {
+    console.error('Attempted to apply an invalid preset.');
+    return;
+  }
+  
+  document.getElementById('dealType').value = preset.dealType;
+  toggleFields();
+  
+  document.getElementById('mrr').value = preset.mrr || '';
+  document.getElementById('growthPct').value = preset.growthPct || '';
+  document.getElementById('borrowAmt').value = preset.borrowAmt || '';
+  
+  if (preset.dealType === 'fixed') {
+    document.getElementById('termMonths').value = preset.termMonths || '';
+    document.getElementById('discountPct').value = preset.discountPct || '';
+    document.getElementById('discountType').value = preset.discountType || 'percent';
+    document.getElementById('flatFee').value = preset.flatFee || '';
+    document.getElementById('flatFeeType').value = preset.flatFeeType || 'percent';
+  } else { // revshare
+    document.getElementById('revSharePct').value = preset.revSharePct || '';
+    document.getElementById('capMultiple').value = preset.capMultiple || '';
+    document.getElementById('upfrontFee').value = preset.upfrontFee || '';
+    document.getElementById('upfrontFeeType').value = preset.upfrontFeeType || 'dollar';
+    document.getElementById('monthlyFee').value = preset.monthlyFee || '';
+    document.getElementById('monthlyFeeType').value = preset.monthlyFeeType || 'percent';
+  }
+  
+  document.getElementById('graceMonths').value = preset.graceMonths || '0';
+  
+
+}
+
+async function populatePresetDropdown() {
+  const select = document.getElementById('presetSelect');
+  
+  try {
+    // Load presets from JSON file
+    const response = await fetch('presets.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const presets = await response.json();
+    
+    if (!presets || !Array.isArray(presets.providers) || presets.providers.length === 0) {
+      throw new Error('No presets found in the JSON file');
+    }
+    
+    console.log(`Successfully loaded ${presets.providers.length} presets`);
+  
+    // Clear existing options except the first one
+    while (select.options.length > 1) {
+      select.remove(1);
+    }
+    
+    // Add presets from JSON
+    presets.providers.forEach(preset => {
+      const option = document.createElement('option');
+      option.value = preset.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      option.textContent = preset.name;
+      option.setAttribute('data-preset', JSON.stringify(preset));
+      select.appendChild(option);
+    });
+    
+    // Add change handler to show description and apply preset
+    select.addEventListener('change', () => {
+      const selectedOption = select.options[select.selectedIndex];
+      const descriptionDiv = document.getElementById('presetDescription');
+      
+      if (selectedOption.value === '' || !selectedOption.dataset.preset) {
+        descriptionDiv.classList.add('hidden');
+        return;
+      }
+      
+      try {
+        const preset = JSON.parse(selectedOption.getAttribute('data-preset'));
+        
+        if (preset) {
+          // Update description
+          descriptionDiv.innerHTML = `
+            <div class="mb-2">${preset.description}</div>
+            <div class="text-xs">
+              <span class="font-medium">Type:</span> ${preset.dealType === 'fixed' ? 'Fixed Installment' : 'Revenue Share'} | 
+              ${preset.minARR ? `<span class="font-medium">Min ARR:</span> $${preset.minARR.toLocaleString()} | ` : ''}
+              ${preset.maxCheckSize ? `<span class="font-medium">Max:</span> $${preset.maxCheckSize.toLocaleString()}` : ''}
+            </div>
+          `;
+          descriptionDiv.classList.remove('hidden');
+
+          // Apply the preset to the form
+          applyPreset(preset);
+        }
+      } catch (e) {
+        console.error('Error parsing preset data:', e);
+        descriptionDiv.textContent = 'Error loading preset details';
+        descriptionDiv.classList.remove('hidden');
+      }
+    });
+    
+    console.log('Presets loaded successfully');
+  } catch (error) {
+    console.error('Error loading presets:', error);
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'text-red-600 text-sm mt-2';
+    errorDiv.textContent = 'Error loading presets. Please check console for details.';
+    select.parentNode.insertBefore(errorDiv, select.nextSibling);
+  }
+}
+
+// Initialize the presets when the page loads
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', populatePresetDropdown);
+} else {
+  // DOM already loaded, run immediately
+  populatePresetDropdown();
+}
+
+/* ---------- Run Button ---------- */
+runBtn.addEventListener('click', () => {
+  // Get all form values
+  const p = {
+    dealType: dealType.value,
+    borrowAmt: +borrowAmt.value,
+    termMonths: +termMonths.value,
+    graceMonths: +graceMonths.value,
+    // These will be handled in their respective calculation functions
+    discountPct: +discountPct.value,
+    revSharePct: +revSharePct.value,
+    capMultiple: +capMultiple.value,
+    mrr: +mrr.value,
+    growthPct: +growthPct.value,
+    monthlyFee: +monthlyFee.value,
+    monthlyFeeType: monthlyFeeType.value
+  };
+
+  let data;
+  switch(p.dealType) {
+    case 'fixed': data = calcFixedInstallmentSeries(p); break;
+    default: data = calcRevshareSeries(p);
+  }
+
+  const { cf, mrrArr, principalBalances } = data;
+  const mIRR = irr(cf);
+  const aIRR = (1 + mIRR) ** 12 - 1;
+  const proceeds = cf[0];
+  let totalRepayment;
+
+  if (p.dealType === 'fixed') {
+    const flatFee = parseFloat(document.getElementById('flatFee').value) || 0;
+    const isFlatFeePct = document.getElementById('flatFeeType').value === 'percent';
+    if (isFlatFeePct) {
+      totalRepayment = p.borrowAmt * (1 + flatFee / 100);
+    } else {
+      totalRepayment = p.borrowAmt + flatFee;
+    }
+  } else { // revshare
+    totalRepayment = p.capMultiple > 0 ? p.borrowAmt * p.capMultiple : Math.abs(cf.slice(1).reduce((a, b) => a + b, 0)); // Fallback for no cap
+  }
+  
+  // Calculate DPI and repayment metrics
+  let cumulativeRepayment = 0;
+  let firstDPIMonth = -1;
+  let terminationMonth = -1; // Initialize here
+
+  for (let i = 1; i < cf.length; i++) {
+    const payment = Math.abs(cf[i]);
+    
+    // Calculate DPI month
+    if (payment > 0) {
+      if (firstDPIMonth === -1) {
+        cumulativeRepayment += payment;
+        if (cumulativeRepayment >= Math.abs(proceeds)) {
+          firstDPIMonth = i;
+        }
+      }
+    }
+
+    // Calculate termination month based on principalBalances
+    // principalBalances[i] holds the balance *after* month i's principal payment
+    if (terminationMonth === -1 && principalBalances[i] <= 0.01) {
+      terminationMonth = i;
+    }
+  }
+  
+  // If termination not reached within max months, set to the last month calculated
+  if (terminationMonth === -1) {
+    terminationMonth = cf.length - 1; 
+  }
+  
+  // Update summary cards
+  summary.innerHTML = `
+    <div class="p-4 bg-slate-50 rounded-lg shadow-inner">
+      <p class="font-medium">Net Proceeds (Day 0)</p>
+      <p>${toCurrency(proceeds)}</p>
+    </div>
+    <div class="p-4 bg-slate-50 rounded-lg shadow-inner">
+      <p class="font-medium">Nominal Repay (Total)</p>
+      <p>${toCurrency(totalRepayment)}</p>
+    </div>
+    <div class="p-4 bg-slate-50 rounded-lg shadow-inner">
+      <p class="font-medium">IRR (monthly)</p>
+      <p>${(mIRR * 100).toFixed(2)}%</p>
+    </div>
+    <div class="p-4 bg-slate-50 rounded-lg shadow-inner">
+      <p class="font-medium">IRR (annual)</p>
+      <p>${(aIRR * 100).toFixed(2)}%</p>
+    </div>
+    ${p.dealType === 'revshare' ? `
+    <div class="p-4 bg-slate-50 rounded-lg shadow-inner">
+      <p class="font-medium">DPI ≥ 1</p>
+      <p>${firstDPIMonth > 0 ? `Month ${firstDPIMonth}` : 'Not reached'}</p>
+    </div>
+    <div class="p-4 bg-slate-50 rounded-lg shadow-inner">
+      <p class="font-medium">Termination</p>
+      <p> Month ${terminationMonth}</p>
+    </div>` : ''}`;
+
+  // Build cash flow table
+  let rows = `
+    <thead>
+      <tr class="border-b">
+        <th class="p-2">Month</th>
+        <th class="p-2">MRR</th>
+        <th class="p-2">Net Cash</th>
+        <th class="p-2">MRR Take-Rate</th>
+        <th class="p-2">Balance Remaining</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+  // Month 0 row
+  // The initial balance for display in Month 0 is the target principal.
+  // The actual calculation of totalRepayment is handled above based on dealType.
+  let bal = principalBalances[0];
+  const mrr0 = mrrArr[0] || 1; // Avoid division by zero
+  const takeRate0 = (proceeds / mrr0) * 100;
+  rows += `
+    <tr class="border-b">
+      <td class="p-2 text-center">0</td>
+      <td class="p-2">${toCurrency(mrr0)}</td>
+      <td class="p-2">${toCurrency(proceeds)}</td>
+      <td class="p-2">${takeRate0.toFixed(2)}%</td>
+      <td class="p-2">${toCurrency(principalBalances[0])}</td>
+    </tr>`;
+
+  // Subsequent months
+  for (let i = 1; i < cf.length; i++) {
+    const mrr = mrrArr[i] || mrrArr[mrrArr.length - 1] || 1; // Use last MRR if undefined, avoid division by zero
+    const takeRate = (cf[i] / mrr) * 100;
+    rows += `
+    <tr class="border-b ${i === firstDPIMonth ? 'bg-slate-50' : ''}">
+      <td class="p-2 text-center">${i}</td>
+      <td class="p-2">${toCurrency(mrr)}</td>
+      <td class="p-2">${toCurrency(cf[i])}</td>
+      <td class="p-2">${takeRate.toFixed(2)}%</td>
+      <td class="p-2">${toCurrency(principalBalances[i])}</td>
+    </tr>`;
+  }
+  
+  rows += '</tbody>';
+  cashTable.innerHTML = rows;
+  output.classList.remove('hidden');
+});
+</script>
+</body>
+</html>
