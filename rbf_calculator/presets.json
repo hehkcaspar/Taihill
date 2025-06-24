@@ -1,6 +1,21 @@
 {
   "providers": [
     {
+      "name": "Taihill RBF",
+      "description": "Revenue share until cap reached (non-dilutive). No fixed term, typically 3 year horizon.",
+      "dealType": "revshare",
+      "mrr": 50000,
+      "growthPct": 8,
+      "borrowAmt": 200000,
+      "revSharePct": 7,
+      "capMultiple": 2,
+      "upfrontFee": 1,
+      "upfrontFeeType": "percent",
+      "graceMonths": 3,
+      "minARR": 600000,
+      "maxCheckSize": 1000000
+    },
+    {
       "name": "RevUp Capital",
       "description": "Revenue share until cap reached (non-dilutive). No fixed term, typically 3-5 year horizon.",
       "dealType": "revshare",
