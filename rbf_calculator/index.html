@@ -10,7 +10,18 @@
 
 <body class="bg-slate-100 p-6">
   <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 space-y-6">
-    <h1 class="text-3xl font-bold mb-4 text-indigo-700">RBF Cash‑Flow Calculator</h1>
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-3xl font-bold text-indigo-700">RBF Cash‑Flow Calculator</h1>
+      <button id="notionInfoBtn" class="ml-2 p-2 rounded-full hover:bg-indigo-100 focus:outline-none"
+        title="Show Taihill RBF Executive Summary">
+        <!-- Heroicons outline information-circle -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-6 h-6 text-indigo-500">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+        </svg>
+      </button>
+    </div>
 
     <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
       <label for="presetSelect" class="block text-sm font-medium text-indigo-800">Typical RBF Provider Setup</label>
@@ -59,8 +70,7 @@
           <label class="block font-medium mb-1"
             title="An upfront fee deducted from the borrowed amount. e.g. You borrow 100, but get 90.">Discount-off-wire</label>
           <div class="flex gap-2">
-            <input type="number" id="discountPct" class="flex-1 rounded-l-lg border p-2" value="0" min="0"
-              step="0.1" />
+            <input type="number" id="discountPct" class="flex-1 rounded-l-lg border p-2" value="0" min="0" step="0.1" />
             <select id="discountType" class="rounded-r-lg border p-2 bg-white">
               <option value="percent">%</option>
               <option value="dollar">$</option>
@@ -597,6 +607,40 @@
       rows += '</tbody>';
       cashTable.innerHTML = rows;
       output.classList.remove('hidden');
+    });
+  </script>
+  <!-- Notion Slide-in Panel -->
+  <div id="notionPanel"
+    class="fixed inset-y-0 right-0 w-full max-w-3xl bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
+    style="height: 100vh;">
+    <div class="flex items-center justify-between p-4 border-b">
+      <span class="font-semibold text-lg text-indigo-700">Taihill RBF Executive Summary, July 2025</span>
+      <button id="closeNotionPanel" class="p-2 rounded hover:bg-indigo-100 focus:outline-none" title="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-6 h-6 text-indigo-500">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <iframe src="https://special-tick-2d5.notion.site/ebd/21ce562aa5bb808c84e3c8f3b05514fc"
+      class="flex-1 w-full border-0" allowfullscreen></iframe>
+  </div>
+  <script>
+    // --- Notion Panel Toggle ---
+    const notionBtn = document.getElementById('notionInfoBtn');
+    const notionPanel = document.getElementById('notionPanel');
+    const closeNotionPanel = document.getElementById('closeNotionPanel');
+    notionBtn.addEventListener('click', () => {
+      notionPanel.classList.remove('translate-x-full');
+    });
+    closeNotionPanel.addEventListener('click', () => {
+      notionPanel.classList.add('translate-x-full');
+    });
+    // Optional: ESC key closes panel
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !notionPanel.classList.contains('translate-x-full')) {
+        notionPanel.classList.add('translate-x-full');
+      }
     });
   </script>
 </body>
